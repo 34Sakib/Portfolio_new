@@ -1,0 +1,31 @@
+# Project Tasks Checklist
+
+- [x] Initialize Vite + React project structure
+- [x] Install required npm dependencies (e.g. lucide-react)
+- [x] Clean up boilerplate files (App.css, index.css, assets, favicon, etc.)
+- [x] Configure design tokens & global CSS
+  - [x] Implement `tokens.css` with light/dark theme CSS variables
+  - [x] Implement `global.css` with core animations, typography, and base layouts
+- [x] Set up theme management context & hooks
+  - [x] Create `ThemeContext.jsx` and `useTheme.js`
+  - [x] Verify light/dark theme switching works on a blank page
+- [x] Populate data layers
+  - [x] Create `skills.js`, `experience.js`, `projects.js`, `education.js`
+- [x] Build shared UI components
+  - [x] `GlassCard.jsx`
+  - [x] `Badge.jsx`
+  - [x] `ThemeToggle.jsx`
+- [x] Build page sections (ScrollSpy navigation, typewriter effects, interactive canvas)
+  - [x] `Navbar.jsx` with active-section Intersection Observer spy
+  - [x] `Hero.jsx` with custom interactive `<canvas>` particle background & typewriter terminal effect
+  - [x] `About.jsx` with developer bio & animated progress stats
+  - [x] `Skills.jsx` with tech grid & glowing hover cards
+  - [x] `Experience.jsx` with vertical timeline & dynamic scroll-drawing
+  - [x] `Projects.jsx` with tilt/shine visual effects & direct github/demo links
+  - [x] `Education.jsx` with clean certifications list
+  - [x] `Contact.jsx` with contact information & functional styled form
+- [x] Integrate components in `App.jsx`
+- [x] Verification & QA Pass
+  - [x] Cross-browser styling compatibility check
+  - [x] Interactive state checks (responsive layouts, accessibility focus, performance tuning)
+  - [x] Build production version (`npm run build`)
