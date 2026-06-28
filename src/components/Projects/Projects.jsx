@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   ShoppingCart, 
   Laptop, 
   Database, 
   Coffee, 
-  Server, 
   Award, 
   GraduationCap, 
-  ExternalLink 
+  ExternalLink,
+  Check
 } from 'lucide-react';
 import { projectsData } from '../../data/projects';
 import GlassCard from '../ui/GlassCard';
@@ -31,110 +31,46 @@ const GithubIcon = ({ size = 20, ...props }) => (
   </svg>
 );
 
-// Custom IceCream icon
-const IceCreamIcon = ({ size = 20, ...props }) => (
-  <svg
-    viewBox="0 0 24 24"
-    width={size}
-    height={size}
-    stroke="currentColor"
-    strokeWidth="2"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="m7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11" />
-    <path d="M17 7A5 5 0 0 0 7 7" />
-    <path d="M19 7v12a5 5 0 0 1-10 0V7" />
-  </svg>
-);
-
-// Map technical skill icon names to actual components
+// Map project icons dynamically
 const getProjectIcon = (iconName) => {
   switch (iconName) {
     case 'ShoppingCart':
-      return <ShoppingCart className="project-card-icon-svg" />;
+      return <ShoppingCart size={18} className="text-cyan" />;
     case 'Laptop':
-      return <Laptop className="project-card-icon-svg" />;
+      return <Laptop size={18} className="text-purple" />;
     case 'Database':
-      return <Database className="project-card-icon-svg" />;
+      return <Database size={18} className="text-orange" />;
     case 'Coffee':
-      return <Coffee className="project-card-icon-svg" />;
-    case 'Server':
-      return <Server className="project-card-icon-svg" />;
+      return <Coffee size={18} className="text-amber" />;
     case 'Award':
-      return <Award className="project-card-icon-svg" />;
-    case 'IceCream':
-      return <IceCreamIcon size={20} />;
+      return <Award size={18} className="text-pink" />;
     case 'GraduationCap':
-      return <GraduationCap className="project-card-icon-svg" />;
+      return <GraduationCap size={18} className="text-indigo" />;
     default:
-      return <Laptop className="project-card-icon-svg" />;
+      return <Laptop size={18} />;
   }
 };
 
-const colorMap = {
-  "from-blue-500 to-cyan-500": "linear-gradient(135deg, #3b82f6, #06b6d4)",
-  "from-indigo-500 to-blue-500": "linear-gradient(135deg, #6366f1, #3b82f6)",
-  "from-purple-500 to-pink-500": "linear-gradient(135deg, #a855f7, #ec4899)",
-  "from-amber-500 to-yellow-500": "linear-gradient(135deg, #f59e0b, #eab308)",
-  "from-green-500 to-emerald-500": "linear-gradient(135deg, #22c55e, #10b981)",
-  "from-red-500 to-pink-500": "linear-gradient(135deg, #ef4444, #ec4899)",
-  "from-cyan-500 to-blue-500": "linear-gradient(135deg, #06b6d4, #3b82f6)",
-  "from-indigo-500 to-purple-500": "linear-gradient(135deg, #6366f1, #a855f7)",
-  "from-green-600 to-emerald-600": "linear-gradient(135deg, #16a34a, #059669)",
-};
-
-const bgColorMap = {
-  "bg-blue-50": "rgba(59, 130, 246, 0.08)",
-  "bg-indigo-50": "rgba(99, 102, 241, 0.08)",
-  "bg-purple-50": "rgba(168, 85, 247, 0.08)",
-  "bg-amber-50": "rgba(245, 158, 11, 0.08)",
-  "bg-green-50": "rgba(34, 197, 94, 0.08)",
-  "bg-red-50": "rgba(239, 68, 68, 0.08)",
-  "bg-cyan-50": "rgba(6, 180, 212, 0.08)",
-  "bg-emerald-50": "rgba(16, 185, 129, 0.08)",
-};
-
 export const Projects = () => {
-  const [activeFilter, setActiveFilter] = useState('all');
-
-  const filters = [
-    { id: 'all', label: 'All Projects', count: projectsData.length },
-    { id: 'laravel', label: 'Laravel', count: projectsData.filter(p => p.tags.some(tag => tag.toLowerCase().includes('laravel'))).length },
-    { id: 'php', label: 'PHP', count: projectsData.filter(p => p.tags.some(tag => tag.toLowerCase().includes('php'))).length },
-    { id: 'mysql', label: 'MySQL', count: projectsData.filter(p => p.tags.some(tag => tag.toLowerCase().includes('mysql'))).length },
-    { id: 'javascript', label: 'JavaScript', count: projectsData.filter(p => p.tags.some(tag => tag.toLowerCase().includes('javascript'))).length },
-  ];
-
-  const filteredProjects = activeFilter === 'all' 
-    ? projectsData 
-    : projectsData.filter(project => 
-        project.tags.some(tag => tag.toLowerCase().includes(activeFilter))
-      );
-
-  // Custom interactive 3D Tilt and Shine effect handlers
+  
+  // Custom interactive 3D Tilt and Shine calculations
   const handleMouseMove = (e) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    // Normalized values from -1 to 1
-    const xc = ((x - rect.width / 2) / (rect.width / 2)) * 8; // Max rotate 8 degrees
-    const yc = -((y - rect.height / 2) / (rect.height / 2)) * 8;
+    const xc = ((x - rect.width / 2) / (rect.width / 2)) * 5; // Max 5 degrees tilt
+    const yc = -((y - rect.height / 2) / (rect.height / 2)) * 5;
     
-    card.style.transform = `perspective(800px) rotateX(${yc}deg) rotateY(${xc}deg) scale3d(1.02, 1.02, 1.02)`;
-    
-    // Update variables for shine element placement
+    card.style.transform = `perspective(1000px) rotateX(${yc}deg) rotateY(${xc}deg) scale3d(1.01, 1.01, 1.01)`;
     card.style.setProperty('--shine-x', `${(x / rect.width) * 100}%`);
     card.style.setProperty('--shine-y', `${(y / rect.height) * 100}%`);
   };
 
   const handleMouseLeave = (e) => {
     const card = e.currentTarget;
-    card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
   };
 
   return (
@@ -145,96 +81,85 @@ export const Projects = () => {
           <h2 className="section-title">Featured Projects</h2>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="projects-filter-container">
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              onClick={() => setActiveFilter(filter.id)}
-              className={`projects-filter-btn ${activeFilter === filter.id ? 'active' : ''}`}
+        <div className="projects-gallery-grid">
+          {projectsData.map((project) => (
+            <GlassCard 
+              key={project.id} 
+              className="project-gallery-card"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
             >
-              <span>{filter.label}</span>
-              <span className="projects-filter-badge">
-                {filter.count}
-              </span>
-            </button>
-          ))}
-        </div>
+              {/* Shine Overlay Effect */}
+              <div className="project-card-shine"></div>
 
-        <div className="projects-grid">
-          {filteredProjects.map((project) => {
-            const hasDemo = project.demoLink && project.demoLink !== '#';
-            return (
-              <GlassCard 
-                key={project.id} 
-                className="project-card-interactive"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-              >
-                {/* Shine Overlay */}
-                <div className="project-card-shine"></div>
+              {/* Project Card Header */}
+              <div className="project-gallery-header">
+                <div className="project-gallery-icon-box">
+                  {getProjectIcon(project.icon)}
+                </div>
+                <h3 className="project-gallery-title">{project.title}</h3>
+              </div>
 
-                {/* Project Image Frame */}
-                <div 
-                  className="project-card-image-box"
-                  style={{ background: bgColorMap[project.bgColor] || 'rgba(10, 14, 26, 0.3)' }}
+              {/* Project Card Image Frame */}
+              <div className="project-gallery-image-box">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="project-gallery-img" 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop";
+                  }}
+                />
+              </div>
+
+              {/* Project Card Content Body */}
+              <div className="project-gallery-body">
+                <p className="project-gallery-desc">{project.description}</p>
+                
+                {/* Detailed checklist from CV */}
+                <ul className="project-features-list">
+                  {project.features && project.features.map((feat, fIdx) => (
+                    <li key={fIdx} className="project-feature-item">
+                      <Check size={14} className="feature-check-icon" />
+                      <span className="feature-text">{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Tech badges */}
+                <div className="project-gallery-tags">
+                  {project.tags.map((tag, tIdx) => (
+                    <Badge key={tIdx} className="project-gallery-tag">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Links */}
+              <div className="project-gallery-footer">
+                <a 
+                  href={project.githubLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-secondary project-footer-btn"
                 >
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="project-card-img-contain" 
-                  />
-                  
-                  {/* Floating Project Icon */}
-                  <div 
-                    className="project-card-icon-badge"
-                    style={{ background: colorMap[project.color] || 'var(--gradient-accent)' }}
+                  <GithubIcon size={16} /> Code Repository
+                </a>
+                {project.demoLink && project.demoLink !== "#" && (
+                  <a 
+                    href={project.demoLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn btn-primary project-footer-btn"
                   >
-                    {getProjectIcon(project.icon)}
-                  </div>
-
-                  <div className="project-card-overlay">
-                    <div className="project-card-links">
-                      <a 
-                        href={project.githubLink} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="project-link-btn"
-                        aria-label={`View ${project.title} source code on Github`}
-                      >
-                        <GithubIcon size={20} />
-                      </a>
-                      {hasDemo && (
-                        <a 
-                          href={project.demoLink} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="project-link-btn"
-                          aria-label={`View ${project.title} live demo`}
-                        >
-                          <ExternalLink size={20} />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Project Content Frame */}
-                <div className="project-card-content">
-                  <h3 className="project-card-title">{project.title}</h3>
-                  <p className="project-card-desc">{project.description}</p>
-                  
-                  <div className="project-card-tags">
-                    {project.tags.map((tag, tIdx) => (
-                      <Badge key={tIdx} className="project-tag-badge">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </GlassCard>
-            );
-          })}
+                    <ExternalLink size={16} /> Live Demo
+                  </a>
+                )}
+              </div>
+            </GlassCard>
+          ))}
         </div>
       </div>
     </section>
