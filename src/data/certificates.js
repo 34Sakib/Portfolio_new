@@ -2,7 +2,7 @@ export const certificatesData = [
   {
     title: "Full Stack Web Development with PHP, Laravel & Vue JS",
     issuer: "Ostad",
-    date: "2024",
+    date: "2025",
     credentialId: "C32929",
     image: "https://lh3.googleusercontent.com/d/1EjvExHwZL7M-hBEsErCe6bHoJgLIurSo",
     verifyLink: "https://drive.google.com/file/d/1EjvExHwZL7M-hBEsErCe6bHoJgLIurSo/view?usp=sharing"
