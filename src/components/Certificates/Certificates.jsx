@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ExternalLink, X, ZoomIn } from 'lucide-react';
 import { certificatesData } from '../../data/certificates';
 import GlassCard from '../ui/GlassCard';
@@ -39,6 +40,7 @@ export const Certificates = () => {
                   src={cert.image} 
                   alt={`${cert.title} Certificate`} 
                   className="certificate-gallery-img"
+                  referrerPolicy="no-referrer"
                 />
                 <div className="certificate-image-overlay">
                   <ZoomIn size={24} className="zoom-icon-svg" />
@@ -76,7 +78,7 @@ export const Certificates = () => {
       </div>
 
       {/* Lightbox / Modal Overlay for Certificate Zoom */}
-      {activeLightboxImage && (
+      {activeLightboxImage && createPortal(
         <div className="lightbox-overlay" onClick={closeLightbox}>
           <button className="lightbox-close-btn" onClick={closeLightbox} aria-label="Close image viewer">
             <X size={30} />
@@ -87,9 +89,11 @@ export const Certificates = () => {
               src={activeLightboxImage} 
               alt="Enlarged Certificate Credential" 
               className="lightbox-image" 
+              referrerPolicy="no-referrer"
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
