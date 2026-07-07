@@ -106,6 +106,7 @@ export const Projects = () => {
                   src={project.image} 
                   alt={project.title} 
                   className="project-gallery-img" 
+                  referrerPolicy="no-referrer"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop";

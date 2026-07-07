@@ -92,6 +92,7 @@ export const Navbar = () => {
     <header className={`navbar-header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container navbar-container">
         <a href="#home" className="navbar-logo" onClick={(e) => handleNavClick(e, '#home')}>
+          <img src="https://lh3.googleusercontent.com/d/1T2iSQZ1JwX9znxPtrEMuGb6_WDp9uqYv" alt="Sakib Al Mahamud Logo" className="navbar-logo-img" referrerPolicy="no-referrer" />
           <span>Sakib</span><span className="dot">.</span>
         </a>
 

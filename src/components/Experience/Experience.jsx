@@ -34,7 +34,19 @@ export const Experience = () => {
                       <Calendar size={14} /> {exp.period}
                     </span>
                     <h3 className="timeline-role">{exp.role}</h3>
-                    <h4 className="timeline-company">{exp.company}</h4>
+                    <div className="timeline-company-wrapper">
+                      {exp.logo && (
+                        <div className="timeline-company-logo-container">
+                          <img 
+                            src={exp.logo} 
+                            alt={`${exp.company} Logo`} 
+                            className="timeline-company-logo" 
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                      )}
+                      <h4 className="timeline-company">{exp.company}</h4>
+                    </div>
                   </div>
                   
                   <p className="timeline-desc">{exp.description}</p>

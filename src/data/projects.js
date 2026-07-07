@@ -2,6 +2,24 @@ import codexlabasia from '../assets/codexlabasia.png';
 
 export const projectsData = [
   {
+    id: 9,
+    title: "Mentors' Global",
+    description: "Comprehensive education management platform featuring IELTS and PTE course dashboards, online mock testing, and interactive student review systems.",
+    features: [
+      "Designed and developed the comprehensive admin dashboard panel to manage IELTS & PTE course curricula and scheduling.",
+      "Built interactive mock exam test environments and practice modules for student assessment and grading.",
+      "Developed secure RESTful API endpoints using Laravel to seamlessly integrate with a React.js client interface.",
+      "Optimized MySQL relational database models to store and evaluate mock test results, answers, and student progress metrics."
+    ],
+    image: "https://lh3.googleusercontent.com/d/1fPgL0H1kOFlZroXzbq_1F4JIJaAqtAJT",
+    tags: ["Laravel 10", "React.js", "MySQL", "REST API", "Bootstrap 5"],
+    githubLink: "#",
+    demoLink: "https://mentorsglobal.com.au/",
+    icon: "GraduationCap",
+    color: "from-teal-500 to-emerald-500",
+    bgColor: "bg-teal-50"
+  },
+  {
     id: 1,
     title: "FruitMart E-commerce",
     description: "Laravel-based platform for fresh fruit sales with inventory, orders, and vendor management.",
