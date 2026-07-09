@@ -650,6 +650,88 @@ a {
   color: #34d399;
 }
 
+/* Interactive Terminal Enhancements */
+.terminal-quick-pills {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  background: rgba(5, 8, 16, 0.9);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.terminal-quick-pills .pill-label {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+.terminal-pill {
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  transition: all var(--transition-fast);
+}
+
+.terminal-pill:hover:not(:disabled) {
+  border-color: var(--primary-accent);
+  color: var(--text-primary);
+  background: var(--surface-card-hover);
+  transform: translateY(-1px);
+}
+
+.terminal-pill:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.terminal-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.terminal-pill.tour-btn {
+  background: var(--primary-accent-glow);
+  color: var(--text-primary);
+  border-color: var(--primary-accent);
+}
+
+.terminal-pill.tour-btn:hover:not(:disabled) {
+  background: var(--primary-accent);
+  box-shadow: 0 0 10px var(--primary-accent-glow);
+}
+
+.terminal-input-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.terminal-input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  outline: none;
+  flex-grow: 1;
+  caret-color: var(--primary-accent);
+  padding: 0;
+  margin: 0;
+}
+
+.terminal-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
 
 /* About Section Styling */
 .about-grid {
@@ -694,7 +776,7 @@ a {
 .about-image {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Keeps the profile cutout fully visible without being cropped */
+  object-fit: cover; /* Fully fills the container space without gaps */
   object-position: bottom;
   transition: transform var(--transition-slow);
 }
@@ -1941,6 +2023,35 @@ a {
   .certificate-image-box {
     height: auto;
   }
+}
+
+/* Spotlight cursor glow background */
+.global-mouse-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    rgba(108, 99, 255, 0.045),
+    rgba(0, 217, 255, 0.02) 40%,
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+[data-theme="light"] .global-mouse-glow {
+  background: radial-gradient(
+    600px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    rgba(91, 82, 224, 0.015),
+    rgba(0, 180, 212, 0.008) 40%,
+    transparent 80%
+  );
+}
+
+.global-mouse-glow.visible {
+  opacity: 1;
 }
 
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Hero';
 import About from './components/About/About';
@@ -11,11 +11,27 @@ import Contact from './components/Contact/Contact';
 import { useScrollReveal } from './hooks/useScrollReveal';
 
 function App() {
+  const [glowVisible, setGlowVisible] = useState(false);
+
   // Initialize standard scroll reveal observer
   useScrollReveal();
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+      if (!glowVisible) setGlowVisible(true);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [glowVisible]);
+
   return (
     <div className="app-layout">
+      {/* Premium Spotlight cursor glow background */}
+      <div className={`global-mouse-glow ${glowVisible ? 'visible' : ''}`} />
+
       <Navbar />
       
       <main>
