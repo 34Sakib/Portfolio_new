@@ -8,6 +8,7 @@ import Projects from './components/Projects/Projects';
 import Education from './components/Education/Education';
 import Certificates from './components/Certificates/Certificates';
 import Contact from './components/Contact/Contact';
+import WhatsAppButton from './components/ui/WhatsAppButton';
 import { useScrollReveal } from './hooks/useScrollReveal';
 
 function App() {
@@ -29,6 +30,9 @@ function App() {
 
   return (
     <div className="app-layout">
+      {/* Premium background grain overlay */}
+      <div className="grain" />
+
       {/* Premium Spotlight cursor glow background */}
       <div className={`global-mouse-glow ${glowVisible ? 'visible' : ''}`} />
 
@@ -60,6 +64,9 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Floating WhatsApp chat widget */}
+      <WhatsAppButton />
     </div>
   );
 }

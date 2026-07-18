@@ -15,6 +15,7 @@ import {
   Wrench,
   Activity
 } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { skillsData } from '../../data/skills';
 import GlassCard from '../ui/GlassCard';
 
@@ -58,17 +59,55 @@ const getSkillIcon = (iconName) => {
 };
 
 export const Skills = () => {
+  const shouldReduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: shouldReduceMotion ? 0 : 30 
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    }
+  };
+
   return (
-    <section id="skills" className="section reveal">
+    <section id="skills" className="section">
       <div className="container">
         <div className="section-header">
           <span className="section-subtitle">Abilities</span>
-          <h2 className="section-title">My Skillset</h2>
+          <h2 className="section-title">My <span className="title-bold">Skillset</span></h2>
         </div>
 
-        <div className="skills-categories-grid">
+        <motion.div 
+          className="skills-categories-grid"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
           {skillsData.map((categoryGroup, index) => (
-            <div key={index} className="skills-category-column">
+            <motion.div 
+              key={index} 
+              variants={itemVariants}
+              className="skills-category-column"
+            >
               <div className="category-header">
                 {categoryGroup.category.toLowerCase().includes("frontend") ? (
                   <Laptop size={20} className="category-icon text-cyan" />
@@ -91,9 +130,9 @@ export const Skills = () => {
                   </GlassCard>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

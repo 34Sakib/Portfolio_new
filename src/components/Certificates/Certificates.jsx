@@ -24,7 +24,7 @@ export const Certificates = () => {
         
         <div className="section-header">
           <span className="section-subtitle">Credentials</span>
-          <h2 className="section-title">Certifications & Courses</h2>
+          <h2 className="section-title">Certifications & <span className="title-bold">Courses</span></h2>
         </div>
 
         <div className="certificates-gallery-grid">

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, Send, CheckCircle, Phone, MapPin } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import GlassCard from '../ui/GlassCard';
+import Magnetic from '../ui/Magnetic';
 
 // Custom inline SVG GitHub Icon to bypass brand icon exclusion in lucide-react
 const GithubIcon = ({ size = 20, ...props }) => (
@@ -21,7 +23,7 @@ const GithubIcon = ({ size = 20, ...props }) => (
 );
 
 // Custom inline SVG LinkedIn Icon to bypass brand icon exclusion in lucide-react
-const LinkedinIcon = ({ size = 20, ...props }) => (
+const LinkedInIcon = ({ size = 20, ...props }) => (
   <svg
     viewBox="0 0 24 24"
     width={size}
@@ -40,6 +42,7 @@ const LinkedinIcon = ({ size = 20, ...props }) => (
 );
 
 export const Contact = () => {
+  const shouldReduceMotion = useReducedMotion();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -81,12 +84,30 @@ export const Contact = () => {
     }, 1800);
   };
 
+  const revealVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 35 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.8, 
+        ease: [0.16, 1, 0.3, 1] 
+      } 
+    }
+  };
+
   return (
-    <section id="contact" className="section reveal">
-      <div className="container">
+    <section id="contact" className="section">
+      <motion.div 
+        className="container"
+        variants={revealVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         <div className="section-header">
           <span className="section-subtitle">Get in Touch</span>
-          <h2 className="section-title">Contact Me</h2>
+          <h2 className="section-title">Contact <span className="title-bold">Me</span></h2>
         </div>
 
         <div className="contact-grid">
@@ -98,27 +119,31 @@ export const Contact = () => {
             </p>
 
             <div className="contact-methods">
-              <a href="mailto:sakibalmahamud34@gmail.com" className="contact-method-card glass-panel">
-                <div className="contact-icon-box mail">
-                  <Mail size={20} />
-                </div>
-                <div className="contact-method-details">
-                  <span className="method-title">Email</span>
-                  <span className="method-value">sakibalmahamud34@gmail.com</span>
-                </div>
-              </a>
+              <Magnetic range={25}>
+                <a href="mailto:sakibalmahamud34@gmail.com" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
+                  <div className="contact-icon-box mail">
+                    <Mail size={20} />
+                  </div>
+                  <div className="contact-method-details">
+                    <span className="method-title">Email</span>
+                    <span className="method-value">sakibalmahamud34@gmail.com</span>
+                  </div>
+                </a>
+              </Magnetic>
 
-              <a href="tel:01641655173" className="contact-method-card glass-panel">
-                <div className="contact-icon-box mail" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-                  <Phone size={20} />
-                </div>
-                <div className="contact-method-details">
-                  <span className="method-title">Phone</span>
-                  <span className="method-value">01641655173</span>
-                </div>
-              </a>
+              <Magnetic range={25}>
+                <a href="tel:01641655173" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
+                  <div className="contact-icon-box mail" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
+                    <Phone size={20} />
+                  </div>
+                  <div className="contact-method-details">
+                    <span className="method-title">Phone</span>
+                    <span className="method-value">01641655173</span>
+                  </div>
+                </a>
+              </Magnetic>
 
-              <div className="contact-method-card glass-panel">
+              <div className="contact-method-card glass-panel" style={{ display: 'flex' }}>
                 <div className="contact-icon-box mail" style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
                   <MapPin size={20} />
                 </div>
@@ -128,25 +153,29 @@ export const Contact = () => {
                 </div>
               </div>
 
-              <a href="https://github.com/34Sakib" target="_blank" rel="noopener noreferrer" className="contact-method-card glass-panel">
-                <div className="contact-icon-box github">
-                  <GithubIcon size={20} />
-                </div>
-                <div className="contact-method-details">
-                  <span className="method-title">GitHub</span>
-                  <span className="method-value">github.com/sakib-al-mahamud</span>
-                </div>
-              </a>
+              <Magnetic range={25}>
+                <a href="https://github.com/34Sakib" target="_blank" rel="noopener noreferrer" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
+                  <div className="contact-icon-box github">
+                    <GithubIcon size={20} />
+                  </div>
+                  <div className="contact-method-details">
+                    <span className="method-title">GitHub</span>
+                    <span className="method-value">github.com/34Sakib</span>
+                  </div>
+                </a>
+              </Magnetic>
 
-              <a href="https://linkedin.com/in/sakib-al-mahamud" target="_blank" rel="noopener noreferrer" className="contact-method-card glass-panel">
-                <div className="contact-icon-box linkedin">
-                  <LinkedinIcon size={20} />
-                </div>
-                <div className="contact-method-details">
-                  <span className="method-title">LinkedIn</span>
-                  <span className="method-value">linkedin.com/in/sakib-al-mahamud</span>
-                </div>
-              </a>
+              <Magnetic range={25}>
+                <a href="https://linkedin.com/in/sakibalmahamud" target="_blank" rel="noopener noreferrer" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
+                  <div className="contact-icon-box linkedin">
+                    <LinkedInIcon size={20} />
+                  </div>
+                  <div className="contact-method-details">
+                    <span className="method-title">LinkedIn</span>
+                    <span className="method-value">linkedin.com/in/sakibalmahamud</span>
+                  </div>
+                </a>
+              </Magnetic>
             </div>
           </div>
 
@@ -160,12 +189,14 @@ export const Contact = () => {
                   <p className="success-desc">
                     Thank you for reaching out. I have received your message and will get back to you within 24 hours.
                   </p>
-                  <button
-                    onClick={() => setIsSubmitted(false)}
-                    className="btn btn-primary"
-                  >
-                    Send Another Message
-                  </button>
+                  <Magnetic>
+                    <button
+                      onClick={() => setIsSubmitted(false)}
+                      className="btn btn-primary"
+                    >
+                      Send Another Message
+                    </button>
+                  </Magnetic>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="contact-form">
@@ -211,27 +242,30 @@ export const Contact = () => {
                     {errors.message && <span className="error-text">{errors.message}</span>}
                   </div>
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-submit"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="spinner"></span> Sending...
-                      </>
-                    ) : (
-                      <>
-                        Send Message <Send size={16} />
-                      </>
-                    )}
-                  </button>
+                  <Magnetic>
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-submit"
+                      disabled={isSubmitting}
+                      style={{ width: 'auto', display: 'inline-flex' }}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="spinner"></span> Sending...
+                        </>
+                      ) : (
+                        <>
+                          Send Message <Send size={16} />
+                        </>
+                      )}
+                    </button>
+                  </Magnetic>
                 </form>
               )}
             </GlassCard>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

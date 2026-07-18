@@ -17,18 +17,5 @@ export const educationData = [
       "GPA: 4.56 / 5.00",
       "Science Background"
     ]
-  },
-  {
-    degree: "Certifications & Courses",
-    school: "Ostad, Udemy, Cisco & Microsoft",
-    year: "2022 - Present",
-    achievements: [
-      "Full Stack Web Development with PHP, Laravel & Vue JS – Ostad",
-      "Introduction to Git – Microsoft",
-      "Introduction to GitHub – Microsoft",
-      "PHP with MySQL: Build Complete Coffee Shop System – Udemy",
-      "JavaScript Essentials 1 – Cisco Networking Academy",
-      "Build E-Commerce Cash On Delivery in Laravel 11 for Beginner – Udemy"
-    ]
   }
 ];

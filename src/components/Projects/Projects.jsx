@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShoppingCart, 
   Laptop, 
@@ -16,13 +16,18 @@ import {
   Flame, 
   Globe, 
   Server, 
-  Terminal
+  Terminal,
+  ChevronLeft,
+  ChevronRight,
+  Lock,
+  RotateCw
 } from 'lucide-react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { projectsData } from '../../data/projects';
-import GlassCard from '../ui/GlassCard';
 import Badge from '../ui/Badge';
+import Magnetic from '../ui/Magnetic';
 
-// Custom inline SVG GitHub Icon to bypass brand icon exclusion in lucide-react
+// Custom inline SVG GitHub Icon
 const GithubIcon = ({ size = 20, ...props }) => (
   <svg
     viewBox="0 0 24 24"
@@ -55,27 +60,6 @@ const getProjectColors = (colorString) => {
   return projectColorMap[colorString] || { primary: '#6C63FF', secondary: '#00D9FF', glow: 'rgba(108, 99, 255, 0.15)' };
 };
 
-// Map project icons dynamically
-const getProjectIcon = (iconName, colors) => {
-  const iconColor = colors ? colors.primary : 'currentColor';
-  switch (iconName) {
-    case 'ShoppingCart':
-      return <ShoppingCart size={18} style={{ color: iconColor }} />;
-    case 'Laptop':
-      return <Laptop size={18} style={{ color: iconColor }} />;
-    case 'Database':
-      return <Database size={18} style={{ color: iconColor }} />;
-    case 'Coffee':
-      return <Coffee size={18} style={{ color: iconColor }} />;
-    case 'Award':
-      return <Award size={18} style={{ color: iconColor }} />;
-    case 'GraduationCap':
-      return <GraduationCap size={18} style={{ color: iconColor }} />;
-    default:
-      return <Laptop size={18} style={{ color: iconColor }} />;
-  }
-};
-
 // Map technical skill tag names to Lucide icons dynamically
 const getTagIcon = (tagName) => {
   const name = tagName.toLowerCase();
@@ -95,126 +79,289 @@ const getTagIcon = (tagName) => {
 };
 
 export const Projects = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
   
-  // Custom interactive 3D Tilt and Shine calculations
-  const handleMouseMove = (e) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const xc = ((x - rect.width / 2) / (rect.width / 2)) * 6; // Max 6 degrees tilt
-    const yc = -((y - rect.height / 2) / (rect.height / 2)) * 6;
-    
-    card.style.transform = `perspective(1000px) rotateX(${yc}deg) rotateY(${xc}deg) scale3d(1.02, 1.02, 1.02)`;
-    card.style.setProperty('--shine-x', `${(x / rect.width) * 100}%`);
-    card.style.setProperty('--shine-y', `${(y / rect.height) * 100}%`);
+  const totalProjects = projectsData.length;
+
+  const nextSlide = () => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % totalProjects);
   };
 
-  const handleMouseLeave = (e) => {
-    const card = e.currentTarget;
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  const prevSlide = () => {
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
   };
+
+  // Keyboard controls for projects carousel
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const projectsEl = document.getElementById('projects');
+      if (!projectsEl) return;
+      const rect = projectsEl.getBoundingClientRect();
+      const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+      
+      if (isInViewport) {
+        if (e.key === 'ArrowRight') {
+          nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+          prevSlide();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex]);
+
+  // Autoplay function
+  useEffect(() => {
+    if (isHovering) return;
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 7500);
+    return () => clearInterval(interval);
+  }, [isHovering, currentIndex]);
+
+  const activeProject = projectsData[currentIndex];
+  const colors = getProjectColors(activeProject.color);
+
+  // Address formatter helper for Chrome/Safari highlight style
+  const formatAddress = (project) => {
+    let url = "";
+    if (project.demoLink && project.demoLink !== "#") {
+      url = project.demoLink.replace(/^https?:\/\//, '');
+    } else {
+      url = `sakib.dev/projects/${project.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+    }
+    
+    const slashIndex = url.indexOf('/');
+    if (slashIndex !== -1) {
+      const domain = url.substring(0, slashIndex);
+      const path = url.substring(slashIndex);
+      return (
+        <>
+          <span className="address-domain">{domain}</span>
+          <span className="address-path">{path}</span>
+        </>
+      );
+    }
+    return <span className="address-domain">{url}</span>;
+  };
+
+  // Animation variants for the entire card to avoid sync lag & layout shifts
+  const cardVariants = shouldReduceMotion
+    ? {
+        enter: { opacity: 0 },
+        center: { opacity: 1, transition: { duration: 0.4 } },
+        exit: { opacity: 0, transition: { duration: 0.3 } }
+      }
+    : {
+        enter: (dir) => ({
+          x: dir > 0 ? 40 : -40,
+          opacity: 0,
+          scale: 0.99
+        }),
+        center: {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+        },
+        exit: (dir) => ({
+          x: dir < 0 ? 40 : -40,
+          opacity: 0,
+          scale: 0.99,
+          transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        })
+      };
 
   return (
-    <section id="projects" className="section reveal">
+    <section id="projects" className="section">
       <div className="container">
         <div className="section-header">
           <span className="section-subtitle">Portfolio</span>
-          <h2 className="section-title">Featured Projects</h2>
+          <h2 className="section-title">Featured <span className="title-bold">Projects</span></h2>
         </div>
 
-        <div className="projects-gallery-grid">
-          {projectsData.map((project) => {
-            const colors = getProjectColors(project.color);
-            return (
-              <GlassCard 
-                key={project.id} 
-                className="project-gallery-card"
-                style={{
-                  '--proj-color-primary': colors.primary,
-                  '--proj-color-secondary': colors.secondary,
-                  '--proj-color-glow': colors.glow
-                }}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-              >
-                {/* Shine Overlay Effect */}
-                <div className="project-card-shine"></div>
+        {/* Carousel Wrapper with colors applied to parent container */}
+        <div 
+          className="projects-carousel-wrapper"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+          style={{
+            '--proj-color-primary': colors.primary,
+            '--proj-color-secondary': colors.secondary,
+            '--proj-color-glow': colors.glow
+          }}
+        >
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={currentIndex}
+              custom={direction}
+              variants={cardVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="projects-carousel-card glass-panel"
+            >
+              {/* Inner Ambient Glow layer */}
+              <div className="projects-card-glow-overlay"></div>
 
-                {/* Project Card Image Frame - Placed at top */}
-                <div className="project-gallery-image-box">
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="project-gallery-img" 
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop";
-                    }}
-                  />
-                  <div className="project-gallery-image-overlay" />
-                </div>
-
-                {/* Project Card Header */}
-                <div className="project-gallery-header">
-                  <div className="project-gallery-icon-box">
-                    {getProjectIcon(project.icon, colors)}
+              <div className="projects-carousel-grid">
+                
+                {/* Left Side: Staggered details */}
+                <div className="projects-carousel-left">
+                  <div className="projects-carousel-badge">
+                    <span className="projects-badge-index">0{currentIndex + 1}</span>
+                    <span className="projects-badge-separator">/</span>
+                    <span className="projects-badge-total">0{totalProjects}</span>
+                    <span className="projects-badge-tagline" style={{ marginLeft: '0.5rem', opacity: 0.6 }}>Featured Work</span>
                   </div>
-                  <h3 className="project-gallery-title">{project.title}</h3>
-                </div>
 
-                {/* Project Card Content Body */}
-                <div className="project-gallery-body">
-                  <p className="project-gallery-desc">{project.description}</p>
-                  
-                  {/* Detailed checklist from CV */}
-                  <ul className="project-features-list">
-                    {project.features && project.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="project-feature-item">
-                        <Check size={14} className="feature-check-icon" />
+                  <h3 className="projects-carousel-title">
+                    {activeProject.title}
+                  </h3>
+
+                  <p className="projects-carousel-desc">
+                    {activeProject.description}
+                  </p>
+
+                  {/* Checklist features */}
+                  <ul className="projects-carousel-features">
+                    {activeProject.features && activeProject.features.map((feat, fIdx) => (
+                      <li key={fIdx} className="projects-carousel-feature-item">
+                        <Check size={14} className="feature-check-icon" style={{ color: colors.primary }} />
                         <span className="feature-text">{feat}</span>
                       </li>
                     ))}
                   </ul>
 
-                  {/* Tech badges */}
-                  <div className="project-gallery-tags">
-                    {project.tags.map((tag, tIdx) => (
-                      <Badge key={tIdx} className="project-gallery-tag">
+                  {/* Tech stack tags */}
+                  <div className="projects-carousel-tags">
+                    {activeProject.tags.map((tag, tIdx) => (
+                      <Badge key={tIdx} className="projects-carousel-tag">
                         {getTagIcon(tag)}
                         <span>{tag}</span>
                       </Badge>
                     ))}
                   </div>
+
+                  {/* Action link buttons */}
+                  <div className="projects-carousel-buttons">
+                    <Magnetic>
+                      <a 
+                        href={activeProject.githubLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="btn btn-secondary project-btn-github"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                      >
+                        <GithubIcon size={16} /> Code Repository
+                      </a>
+                    </Magnetic>
+                    {activeProject.demoLink && activeProject.demoLink !== "#" && (
+                      <Magnetic>
+                        <a 
+                          href={activeProject.demoLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="btn btn-primary project-btn-demo"
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                        >
+                          <ExternalLink size={16} /> Live Demo
+                        </a>
+                      </Magnetic>
+                    )}
+                  </div>
                 </div>
 
-                {/* Action Links */}
-                <div className="project-gallery-footer">
-                  <a 
-                    href={project.githubLink} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="btn btn-secondary project-footer-btn project-btn-github"
-                  >
-                    <GithubIcon size={16} /> Code Repository
-                  </a>
-                  {project.demoLink && project.demoLink !== "#" && (
-                    <a 
-                      href={project.demoLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="btn btn-primary project-footer-btn project-btn-demo"
-                    >
-                      <ExternalLink size={16} /> Live Demo
-                    </a>
-                  )}
+                {/* Right Side: Mockup Browser Frame */}
+                <div className="projects-carousel-right">
+                  <div className="projects-browser-mockup">
+                    <div className="browser-topbar">
+                      <div className="browser-dots">
+                        <span className="browser-dot red"></span>
+                        <span className="browser-dot yellow"></span>
+                        <span className="browser-dot green"></span>
+                      </div>
+                      <div className="browser-address">
+                        <Lock size={12} className="browser-lock-icon" />
+                        {formatAddress(activeProject)}
+                        <RotateCw size={11} className="browser-reload-icon" />
+                      </div>
+                    </div>
+                    
+                    <div className="browser-screen">
+                      <img 
+                        src={activeProject.image} 
+                        alt={activeProject.title} 
+                        className="browser-screen-img"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop";
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </GlassCard>
-            );
-          })}
+
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Carousel navigation controls */}
+          <div className="projects-carousel-controls">
+            <div className="projects-carousel-dots">
+              {projectsData.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setDirection(idx > currentIndex ? 1 : -1);
+                    setCurrentIndex(idx);
+                  }}
+                  className={`projects-carousel-dot ${idx === currentIndex ? 'active' : ''}`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Autoplay progress bar */}
+            <div className="projects-carousel-progress-container">
+              <motion.div 
+                key={currentIndex + (isHovering ? '-paused' : '-playing')}
+                initial={{ width: '0%' }}
+                animate={{ width: isHovering ? '0%' : '100%' }}
+                transition={{ duration: isHovering ? 0 : 7.5, ease: 'linear' }}
+                className="projects-carousel-progress-bar"
+              />
+            </div>
+
+            <div className="projects-carousel-arrows">
+              <Magnetic range={30}>
+                <button 
+                  onClick={prevSlide}
+                  className="projects-carousel-arrow-btn"
+                  aria-label="Previous project"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+              </Magnetic>
+              <Magnetic range={30}>
+                <button 
+                  onClick={nextSlide}
+                  className="projects-carousel-arrow-btn"
+                  aria-label="Next project"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </Magnetic>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
   );
