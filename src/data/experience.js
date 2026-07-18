@@ -5,11 +5,9 @@ export const experienceData = [
     role: "Full Stack Developer",
     company: "Mentors",
     logo: "https://mentors.com.bd/images/mentorsLogo.png",
-    bullets: [
-      "Architecting and maintaining full-stack features for the Mentors' Global website utilizing Laravel and React.js.",
-      "Implementing modern frontend UI components and robust, secure backend APIs.",
-      "Collaborating with cross-functional teams to deliver high-quality, scalable web solutions for international users."
-    ],
+    location: "Dhaka, Bangladesh",
+    type: "Full-Time",
+    description: "Architecting and maintaining full-stack features for the Mentors' Global education platform. Designing modern React interfaces coupled with highly secure Laravel REST APIs.",
     tags: ["Laravel", "React.js", "PHP", "MySQL", "JavaScript"]
   },
   {
@@ -18,13 +16,10 @@ export const experienceData = [
     role: "Full Stack Developer",
     company: "CodexLabAsia",
     logo: "https://lh3.googleusercontent.com/d/1fpPlXHSyVKrYhTIydcwOiBzoFGQS-qOu",
-    bullets: [
-      "Developed a Laravel-based business management system, building custom frontend and admin modules.",
-      "Implemented secure role-based access control (RBAC) using Laravel Sanctum and Spatie Permission.",
-      "Built robust CMS modules for company services, portfolios, careers, and application tracking systems.",
-      "Optimized high-traffic admin dashboards using Yajra DataTables to accelerate data queries and rendering."
-    ],
-    tags: ["Laravel 10", "MySQL", "Sanctum", "Spatie Permission", "Vite", "Yajra DataTables"]
+    location: "Dhaka, Bangladesh (Remote)",
+    type: "Full-Time",
+    description: "Developed custom business management systems with advanced role-based access controls. Optimized high-traffic admin dashboards using Yajra DataTables to accelerate query response times.",
+    tags: ["Laravel 10", "MySQL", "Sanctum", "Spatie", "Vite", "DataTables"]
   },
   {
     period: "January 2025 – November 2025",
@@ -32,11 +27,9 @@ export const experienceData = [
     role: "Junior Software Developer",
     company: "Codexlab BD",
     logo: "https://codexlabbd.com/codexlab-logo.png",
-    bullets: [
-      "Engineered and maintained full-stack web applications using Laravel and Blade templating engines.",
-      "Designed responsive, mobile-first user interfaces using Bootstrap, HTML5, CSS3, and JavaScript.",
-      "Managed database schemas and complex relationships using Laravel Eloquent ORM, optimizing query speeds."
-    ],
-    tags: ["Laravel", "Blade Templates", "MySQL", "Bootstrap", "JavaScript", "Eloquent ORM"]
+    location: "Dhaka, Bangladesh",
+    type: "Full-Time",
+    description: "Engineered responsive, mobile-first web applications using Laravel, Blade, and Bootstrap. Designed relational databases and optimized schema queries via Eloquent ORM.",
+    tags: ["Laravel", "Blade", "MySQL", "Bootstrap", "JavaScript", "Eloquent ORM"]
   }
 ];

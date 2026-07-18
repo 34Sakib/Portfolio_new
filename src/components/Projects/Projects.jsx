@@ -251,17 +251,19 @@ export const Projects = () => {
 
                   {/* Action link buttons */}
                   <div className="projects-carousel-buttons">
-                    <Magnetic>
-                      <a 
-                        href={activeProject.githubLink} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="btn btn-secondary project-btn-github"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
-                      >
-                        <GithubIcon size={16} /> Code Repository
-                      </a>
-                    </Magnetic>
+                    {activeProject.githubLink && (
+                      <Magnetic>
+                        <a 
+                          href={activeProject.githubLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="btn btn-secondary project-btn-github"
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                        >
+                          <GithubIcon size={16} /> Code Repository
+                        </a>
+                      </Magnetic>
+                    )}
                     {activeProject.demoLink && activeProject.demoLink !== "#" && (
                       <Magnetic>
                         <a 

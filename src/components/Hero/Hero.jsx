@@ -182,17 +182,6 @@ export const Hero = () => {
           </motion.div>
         </div>
       </motion.div>
-
-      {/* Elegant Scroll Indicator at bottom */}
-      <motion.div 
-        className="scroll-cue"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
-      >
-        <span className="scroll-text">SCROLL</span>
-        <span className="line"></span>
-      </motion.div>
     </section>
   );
 };

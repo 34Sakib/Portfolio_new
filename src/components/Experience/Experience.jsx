@@ -1,76 +1,70 @@
 import React from 'react';
-import { Calendar, Check } from 'lucide-react';
+import { 
+  Calendar, 
+  CheckCircle2, 
+  Atom, 
+  Layers, 
+  FileCode, 
+  Code, 
+  Cpu, 
+  Flame, 
+  Globe, 
+  Database, 
+  Terminal, 
+  Lock, 
+  Zap 
+} from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { experienceData } from '../../data/experience';
-import GlassCard from '../ui/GlassCard';
 import Badge from '../ui/Badge';
+
+// Map technical skill tag names to Lucide icons dynamically
+const getTagIcon = (tagName) => {
+  const name = tagName.toLowerCase();
+  if (name.includes('react')) return <Atom size={12} className="tag-icon text-react" style={{ color: '#00d8ff', marginRight: '0.35rem' }} />;
+  if (name.includes('laravel')) return <Flame size={12} className="tag-icon text-laravel" style={{ color: '#ff2d20', marginRight: '0.35rem' }} />;
+  if (name.includes('mysql')) return <Database size={12} className="tag-icon text-db" style={{ color: '#336791', marginRight: '0.35rem' }} />;
+  if (name.includes('postgres')) return <Database size={12} className="tag-icon text-db" style={{ color: '#336791', marginRight: '0.35rem' }} />;
+  if (name.includes('api')) return <Globe size={12} className="tag-icon text-api" style={{ color: '#f59e0b', marginRight: '0.35rem' }} />;
+  if (name.includes('php')) return <Cpu size={12} className="tag-icon text-php" style={{ color: '#777bb4', marginRight: '0.35rem' }} />;
+  if (name.includes('bootstrap')) return <Layers size={12} className="tag-icon text-tailwind" style={{ color: '#38bdf8', marginRight: '0.35rem' }} />;
+  if (name.includes('typescript')) return <FileCode size={12} className="tag-icon text-ts" style={{ color: '#3178c6', marginRight: '0.35rem' }} />;
+  if (name.includes('javascript') || name.includes('jquery')) return <Code size={12} className="tag-icon text-js" style={{ color: '#f7df1e', marginRight: '0.35rem' }} />;
+  if (name.includes('sanctum') || name.includes('spatie') || name.includes('auth')) return <Lock size={12} className="tag-icon text-auth" style={{ color: '#10b981', marginRight: '0.35rem' }} />;
+  if (name.includes('vite')) return <Zap size={12} className="tag-icon text-vite" style={{ color: '#f59e0b', marginRight: '0.35rem' }} />;
+  if (name.includes('blade') || name.includes('html') || name.includes('css')) return <Layers size={12} className="tag-icon text-html" style={{ color: '#f0533c', marginRight: '0.35rem' }} />;
+  return <Terminal size={12} className="tag-icon text-terminal" style={{ marginRight: '0.35rem' }} />;
+};
+
 
 export const Experience = () => {
   const shouldReduceMotion = useReducedMotion();
 
-  // Scroll Reveal Animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.25,
+        staggerChildren: 0.15,
         delayChildren: 0.1
       }
     }
   };
 
-  const lineVariants = {
-    hidden: { height: 0 },
-    visible: {
-      height: '100%',
-      transition: { duration: 1.2, ease: "easeOut" }
-    }
-  };
-
-  const nodeVariants = shouldReduceMotion
-    ? { hidden: { scale: 0.5 }, visible: { scale: 1 } }
-    : {
-        hidden: { scale: 0, opacity: 0 },
-        visible: {
-          scale: 1,
-          opacity: 1,
-          transition: { type: "spring", stiffness: 300, damping: 20, delay: 0.15 }
-        }
-      };
-
-  // Alternating card animations
-  const leftCardVariants = shouldReduceMotion
+  const itemVariants = shouldReduceMotion
     ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
     : {
-        hidden: { opacity: 0, x: -60 },
+        hidden: { opacity: 0, y: 30 },
         visible: {
           opacity: 1,
-          x: 0,
-          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
-        }
-      };
-
-  const rightCardVariants = shouldReduceMotion
-    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
-    : {
-        hidden: { opacity: 0, x: 60 },
-        visible: {
-          opacity: 1,
-          x: 0,
-          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
+          y: 0,
+          transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
         }
       };
 
   return (
     <section id="experience" className="section">
-      <motion.div 
-        className="container"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.15 }}
-      >
+      <div className="container">
         <div className="section-header">
           <span className="section-subtitle">Journey</span>
           <h2 className="section-title">
@@ -78,92 +72,98 @@ export const Experience = () => {
           </h2>
         </div>
 
-        <div className="timeline-container">
-          {/* Vertical axis line animated on scroll */}
-          {!shouldReduceMotion && (
-            <motion.div 
-              className="timeline-line"
-              variants={lineVariants}
-            />
-          )}
-
-          <div className="timeline-items">
-            {experienceData.map((exp, idx) => {
-              const isLeft = idx % 2 === 0;
-              const isCurrent = exp.period.toLowerCase().includes('present');
-
-              return (
-                <div 
-                  key={idx} 
-                  className={`timeline-item ${isLeft ? 'left' : 'right'}`}
-                >
-                  {/* Pulsing Visual marker node on the axis line */}
-                  <motion.div 
-                    className={`timeline-dot ${isCurrent ? 'active' : ''}`}
-                    variants={nodeVariants}
-                  >
-                    <div className="timeline-dot-inner"></div>
-                  </motion.div>
-
-                  {/* Alternating Slide-In Card */}
-                  <motion.div 
-                    className="timeline-card-wrapper"
-                    variants={isLeft ? leftCardVariants : rightCardVariants}
-                  >
-                    <GlassCard className={`timeline-card ${isCurrent ? 'current-role' : ''}`}>
-                      <div className="timeline-card-header">
-                        <div className="timeline-meta-row">
-                          <span className="timeline-period">
-                            <Calendar size={13} /> {exp.period}
-                          </span>
-                          <span className="timeline-duration-badge">
-                            {exp.duration}
-                          </span>
-                        </div>
-                        
-                        <h3 className="timeline-role">{exp.role}</h3>
-                        
-                        <div className="timeline-company-wrapper">
-                          {exp.logo && (
-                            <div className="timeline-company-logo-container">
-                              <img 
-                                src={exp.logo} 
-                                alt={`${exp.company} Logo`} 
-                                className="timeline-company-logo" 
-                                referrerPolicy="no-referrer"
-                              />
-                            </div>
-                          )}
-                          <h4 className="timeline-company">{exp.company}</h4>
-                        </div>
-                      </div>
-                      
-                      {/* Scannable Bullet Point Achievement List */}
-                      <ul className="timeline-bullet-list">
-                        {exp.bullets.map((bullet, bIdx) => (
-                          <li key={bIdx} className="timeline-bullet-item">
-                            <Check size={14} className="timeline-bullet-icon" />
-                            <span className="bullet-text">{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      
-                      {/* Accent-tinted tech pill tags */}
-                      <div className="timeline-tags">
-                        {exp.tags.map((tag, tIdx) => (
-                          <Badge key={tIdx} className="timeline-tag">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </GlassCard>
-                  </motion.div>
-                </div>
-              );
-            })}
+        <motion.div 
+          className="experience-browser-mockup glass-panel"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <div className="browser-topbar">
+            <div className="browser-dots">
+              <span className="browser-dot red"></span>
+              <span className="browser-dot yellow"></span>
+              <span className="browser-dot green"></span>
+            </div>
+            <div className="browser-window-title">Experience</div>
           </div>
-        </div>
-      </motion.div>
+
+          <div className="browser-content">
+            <div className="experience-tree">
+              {experienceData.map((exp, idx) => {
+                return (
+                  <motion.div 
+                    key={idx} 
+                    className="experience-company-node"
+                    variants={itemVariants}
+                  >
+                    {/* Company Header: Logo + Name */}
+                    <div className="company-info-row">
+                      <div className="company-logo-circle">
+                        {exp.logo ? (
+                          <img 
+                            src={exp.logo} 
+                            alt={`${exp.company} Logo`} 
+                            className="company-logo-img"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className="company-logo-placeholder" 
+                          style={{ display: exp.logo ? 'none' : 'flex' }}
+                        >
+                          {exp.company.substring(0, 1)}
+                        </div>
+                      </div>
+                      <h3 className="company-name">{exp.company}</h3>
+                    </div>
+
+                    {/* Role Details container with branch curve */}
+                    <div className="role-details-container">
+                      <div className="role-content-card">
+                        <div className="role-header-row">
+                          <h4 className="role-title">{exp.role}</h4>
+                          <span className="verified-badge-wrap">
+                            <CheckCircle2 size={15} className="verified-icon" />
+                          </span>
+                        </div>
+
+                        {/* Metadata row */}
+                        <div className="role-meta-row">
+                          <span className="meta-item period">{exp.period} ({exp.duration})</span>
+                          <span className="meta-separator">•</span>
+                          <span className="meta-item location">{exp.location}</span>
+                          <span className="meta-separator">•</span>
+                          <span className="meta-item type">{exp.type}</span>
+                        </div>
+
+                        {/* Short 1-3 line description */}
+                        <p className="role-description">
+                          {exp.description}
+                        </p>
+
+                        {/* Tech tags */}
+                        <div className="role-tags-row">
+                          {exp.tags.map((tag, tIdx) => (
+                            <Badge key={tIdx} className="experience-tag-badge" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                              {getTagIcon(tag)}
+                              <span>{tag}</span>
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 };

@@ -13,7 +13,6 @@ export const projectsData = [
     ],
     image: "https://lh3.googleusercontent.com/d/1fPgL0H1kOFlZroXzbq_1F4JIJaAqtAJT",
     tags: ["Laravel 10", "React.js", "MySQL", "REST API", "Bootstrap 5"],
-    githubLink: "#",
     demoLink: "https://mentorsglobal.com.au/",
     icon: "GraduationCap",
     color: "from-teal-500 to-emerald-500",
