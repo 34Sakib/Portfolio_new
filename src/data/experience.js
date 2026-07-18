@@ -1,7 +1,7 @@
 export const experienceData = [
   {
     period: "June 2026 – Present",
-    duration: "2 mos",
+    duration: "Ongoing",
     role: "Full Stack Developer",
     company: "Mentors",
     logo: "https://mentors.com.bd/images/mentorsLogo.png",
@@ -16,7 +16,7 @@ export const experienceData = [
     role: "Full Stack Developer",
     company: "CodexLabAsia",
     logo: "https://lh3.googleusercontent.com/d/1fpPlXHSyVKrYhTIydcwOiBzoFGQS-qOu",
-    location: "Dhaka, Bangladesh (Remote)",
+    location: "Dhaka, Bangladesh",
     type: "Full-Time",
     description: "Developed custom business management systems with advanced role-based access controls. Optimized high-traffic admin dashboards using Yajra DataTables to accelerate query response times.",
     tags: ["Laravel 10", "MySQL", "Sanctum", "Spatie", "Vite", "DataTables"]
