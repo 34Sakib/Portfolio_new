@@ -1,6 +1,26 @@
 import codexlabasia from '../assets/codexlabasia.png';
+import kino from '../assets/kino.png';
 
 export const projectsData = [
+  {
+    id: 10,
+    title: "Kino Atelier",
+    description: "Elegant e-commerce storefront specializing in curated handcrafted travertine, white oak, and fluted earthenware home decor.",
+    features: [
+      "Designed and developed a high-fidelity Single Page Application (SPA) frontend focused on premium design aesthetics, fluid transitions, and dynamic scroll-responsive navigation.",
+      "Built a comprehensive administration dashboard panel utilizing Filament to manage product inventory, categories, active coupon codes, and shipping logs.",
+      "Developed secure RESTful API endpoints using Laravel 12 to handle user authentication, product catalogs, and cart state management.",
+      "Integrated Stripe Checkout for seamless, secure transaction processing and payment verification.",
+      "Optimized database models and media libraries to manage product variations, galleries, and client review media."
+    ],
+    image: kino,
+    tags: ["Laravel 12", "React.js", "Tailwind CSS", "Zustand", "MySQL", "Stripe API"],
+    githubLink: "https://github.com/34Sakib/Kino",
+    demoLink: "#",
+    icon: "ShoppingBag",
+    color: "from-amber-600 to-orange-700",
+    bgColor: "bg-amber-50"
+  },
   {
     id: 9,
     title: "Mentors' Global",

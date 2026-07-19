@@ -1,80 +1,116 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ExternalLink, X, ZoomIn } from 'lucide-react';
+import { X, ZoomIn, Copy, Check, Award } from 'lucide-react';
 import { certificatesData } from '../../data/certificates';
-import GlassCard from '../ui/GlassCard';
-import Badge from '../ui/Badge';
 
 export const Certificates = () => {
+  const [copiedId, setCopiedId] = useState(null); // Tracks which certificate's ID is copied
   const [activeLightboxImage, setActiveLightboxImage] = useState(null);
+
+  const handleCopy = (id, idx) => {
+    navigator.clipboard.writeText(id).then(() => {
+      setCopiedId(idx);
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy credential ID: ', err);
+    });
+  };
 
   const openLightbox = (image) => {
     setActiveLightboxImage(image);
-    document.body.style.overflow = 'hidden'; // Lock scrolling during popup
+    document.body.style.overflow = 'hidden';
   };
 
   const closeLightbox = () => {
     setActiveLightboxImage(null);
-    document.body.style.overflow = 'auto'; // Restore scroll
+    document.body.style.overflow = 'auto';
+  };
+
+  const truncateId = (id) => {
+    if (!id) return '';
+    if (id.length <= 16) return id;
+    return `${id.slice(0, 10)}...${id.slice(-6)}`;
   };
 
   return (
     <section id="certificates" className="section reveal">
       <div className="container">
         
+        {/* Premium section header matching reference image */}
         <div className="section-header">
           <span className="section-subtitle">Credentials</span>
-          <h2 className="section-title">Certifications & <span className="title-bold">Courses</span></h2>
+          <h2 className="section-title">
+            Certifications & <span className="title-bold">Courses</span>
+          </h2>
         </div>
 
-        <div className="certificates-gallery-grid">
+        {/* 2-Column Minimalist List Grid */}
+        <div className="certificates-list-grid">
           {certificatesData.map((cert, idx) => (
-            <GlassCard key={idx} className="certificate-gallery-card">
+            <div key={idx} className="certificate-grid-card">
               
-              {/* Image Frame with zoom trigger */}
+              {/* Left Column: Very compact matted thumbnail */}
               <div 
-                className="certificate-image-box"
+                className="cert-thumbnail-wrapper"
                 onClick={() => openLightbox(cert.image)}
+                title="Click to view full certificate"
               >
-                <img 
-                  src={cert.image} 
-                  alt={`${cert.title} Certificate`} 
-                  className="certificate-gallery-img"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="certificate-image-overlay">
-                  <ZoomIn size={24} className="zoom-icon-svg" />
-                  <span className="zoom-text">Click to View Image</span>
+                <div className="cert-thumbnail-mat">
+                  <img 
+                    src={cert.image} 
+                    alt={`${cert.title} Certificate`} 
+                    className="cert-thumbnail-img"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="cert-thumbnail-overlay">
+                    <ZoomIn size={12} className="zoom-icon-small" />
+                  </div>
                 </div>
               </div>
 
-              {/* Certificate content and tags */}
-              <div className="certificate-gallery-content">
-                <div className="cert-meta-header">
-                  <Badge className="cert-issuer-badge">{cert.issuer}</Badge>
-                  <span className="cert-date">{cert.date}</span>
+              {/* Right Column: Improved Premium Typography Details */}
+              <div className="cert-details-col">
+                <h3 className="certificate-grid-title">
+                  {cert.title}
+                </h3>
+                
+                <div className="cert-meta-info-row">
+                  <Award size={14} className="cert-award-icon" />
+                  <span className="cert-issuer-text">{cert.issuer}</span>
+                  <span className="cert-meta-separator">•</span>
+                  <span className="cert-date-text">Earned {cert.date}</span>
                 </div>
-                
-                <h3 className="certificate-gallery-title">{cert.title}</h3>
-                
-                {cert.credentialId && (
-                  <p className="certificate-cred-id">
-                    ID: <code>{cert.credentialId}</code>
-                  </p>
-                )}
 
-                <a 
-                  href={cert.verifyLink} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="btn btn-secondary btn-verify-cred"
-                >
-                  Verify Credential <ExternalLink size={14} />
-                </a>
+                <div className="cert-actions-inline">
+                  <a 
+                    href={cert.verifyLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="cert-inline-action"
+                  >
+                    Verify Credential
+                  </a>
+                  {cert.credentialId && (
+                    <>
+                      <span className="cert-action-dot">•</span>
+                      <button 
+                        className={`cert-inline-action copy-action-trigger ${copiedId === idx ? 'copied' : ''}`}
+                        onClick={() => handleCopy(cert.credentialId, idx)}
+                        aria-label="Copy credential ID"
+                      >
+                        {copiedId === idx ? "Copied!" : `ID: ${truncateId(cert.credentialId)}`}
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
-            </GlassCard>
+
+            </div>
           ))}
         </div>
+
       </div>
 
       {/* Lightbox / Modal Overlay for Certificate Zoom */}

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Mail, Send, CheckCircle, Phone, MapPin } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Mail, Phone } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import GlassCard from '../ui/GlassCard';
 import Magnetic from '../ui/Magnetic';
 
 // Custom inline SVG GitHub Icon to bypass brand icon exclusion in lucide-react
@@ -41,47 +40,60 @@ const LinkedInIcon = ({ size = 20, ...props }) => (
   </svg>
 );
 
+// Encapsulated Inline Auto-Resizing Input Component
+const InlineInput = ({ value, onChange, placeholder, type = "text", id, ...props }) => {
+  const spanRef = useRef(null);
+  const [width, setWidth] = useState(150);
+
+  useEffect(() => {
+    if (spanRef.current) {
+      // Measure dummy span size and add a buffer for typing cursor
+      const measuredWidth = spanRef.current.offsetWidth;
+      setWidth(Math.max(measuredWidth + 10, 120));
+    }
+  }, [value, placeholder]);
+
+  return (
+    <span className="inline-input-wrapper" style={{ width }}>
+      <input
+        type={type}
+        id={id}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="inline-sentence-input"
+        required
+        {...props}
+      />
+      {/* Absolute hidden span mirroring styles for dynamic width calculation */}
+      <span ref={spanRef} className="inline-input-dummy" aria-hidden="true">
+        {value || placeholder}
+      </span>
+    </span>
+  );
+};
+
 export const Contact = () => {
   const shouldReduceMotion = useReducedMotion();
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', project: '', email: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email address is invalid';
-    }
-    if (!formData.message.trim()) newErrors.message = 'Message is required';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     setIsSubmitting(true);
 
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
-    }, 1800);
+      setFormData({ name: '', project: '', email: '' });
+    }, 1500);
   };
 
   const revealVariants = {
@@ -97,7 +109,7 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section">
+    <section id="contact" className="section reveal">
       <motion.div 
         className="container"
         variants={revealVariants}
@@ -105,165 +117,112 @@ export const Contact = () => {
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
       >
-        <div className="section-header">
-          <span className="section-subtitle">Get in Touch</span>
-          <h2 className="section-title">Contact <span className="title-bold">Me</span></h2>
-        </div>
-
-        <div className="contact-grid">
-          {/* Left Column: Contact Cards */}
-          <div className="contact-info">
-            <h3 className="contact-headline">Let's build something remarkable together.</h3>
-            <p className="contact-desc">
-              Have a project in mind, looking to hire, or just want to chat about web technology? Feel free to reach out. I am always open to discussing new ideas, software architectures, or full-stack opportunities.
-            </p>
-
-            <div className="contact-methods">
-              <Magnetic range={25}>
-                <a href="mailto:sakibalmahamud34@gmail.com" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
-                  <div className="contact-icon-box mail">
-                    <Mail size={20} />
-                  </div>
-                  <div className="contact-method-details">
-                    <span className="method-title">Email</span>
-                    <span className="method-value">sakibalmahamud34@gmail.com</span>
-                  </div>
+        <div className="contact-sentence-layout">
+          
+          {/* Left Column: Brand Statement */}
+          <div className="contact-brand-column">
+            <div className="section-header">
+              <span className="section-subtitle">PARTNERSHIP & INQUIRIES</span>
+              <h2 className="section-title">
+                Let's get <span className="title-bold">started.</span>
+              </h2>
+            </div>
+            
+            {/* Minimal horizontal icons list matching user's request */}
+            <div className="contact-minimal-icons-row">
+              <Magnetic range={15}>
+                <a 
+                  href="mailto:sakibalmahamud34@gmail.com" 
+                  className="contact-icon-btn mail" 
+                  aria-label="Email Sakib"
+                  title="sakibalmahamud34@gmail.com"
+                >
+                  <Mail size={18} />
+                  <span className="tooltip-text">sakibalmahamud34@gmail.com</span>
                 </a>
               </Magnetic>
 
-              <Magnetic range={25}>
-                <a href="tel:01641655173" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
-                  <div className="contact-icon-box mail" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-                    <Phone size={20} />
-                  </div>
-                  <div className="contact-method-details">
-                    <span className="method-title">Phone</span>
-                    <span className="method-value">01641655173</span>
-                  </div>
+              <Magnetic range={15}>
+                <a 
+                  href="tel:01641655173" 
+                  className="contact-icon-btn phone" 
+                  aria-label="Call Sakib"
+                  title="01641655173"
+                >
+                  <Phone size={18} />
+                  <span className="tooltip-text">01641655173</span>
                 </a>
               </Magnetic>
 
-              <div className="contact-method-card glass-panel" style={{ display: 'flex' }}>
-                <div className="contact-icon-box mail" style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
-                  <MapPin size={20} />
-                </div>
-                <div className="contact-method-details">
-                  <span className="method-title">Location</span>
-                  <span className="method-value">Kuril, Dhaka, Bangladesh</span>
-                </div>
-              </div>
-
-              <Magnetic range={25}>
-                <a href="https://github.com/34Sakib" target="_blank" rel="noopener noreferrer" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
-                  <div className="contact-icon-box github">
-                    <GithubIcon size={20} />
-                  </div>
-                  <div className="contact-method-details">
-                    <span className="method-title">GitHub</span>
-                    <span className="method-value">github.com/34Sakib</span>
-                  </div>
+              <Magnetic range={15}>
+                <a 
+                  href="https://github.com/34Sakib" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="contact-icon-btn github" 
+                  aria-label="GitHub Profile"
+                  title="GitHub Profile"
+                >
+                  <GithubIcon size={18} />
+                  <span className="tooltip-text">github.com/34Sakib</span>
                 </a>
               </Magnetic>
 
-              <Magnetic range={25}>
-                <a href="https://linkedin.com/in/sakibalmahamud" target="_blank" rel="noopener noreferrer" className="contact-method-card glass-panel" style={{ display: 'flex', width: '100%' }}>
-                  <div className="contact-icon-box linkedin">
-                    <LinkedInIcon size={20} />
-                  </div>
-                  <div className="contact-method-details">
-                    <span className="method-title">LinkedIn</span>
-                    <span className="method-value">linkedin.com/in/sakibalmahamud</span>
-                  </div>
+              <Magnetic range={15}>
+                <a 
+                  href="https://linkedin.com/in/sakibalmahamud" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="contact-icon-btn linkedin" 
+                  aria-label="LinkedIn Profile"
+                  title="LinkedIn Profile"
+                >
+                  <LinkedInIcon size={18} />
+                  <span className="tooltip-text">linkedin.com/in/sakibalmahamud</span>
                 </a>
               </Magnetic>
             </div>
           </div>
 
-          {/* Right Column: Contact Form */}
-          <div className="contact-form-wrapper">
-            <GlassCard className="contact-form-card">
-              {isSubmitted ? (
-                <div className="form-success-state">
-                  <CheckCircle size={60} className="success-icon animate-bounce text-cyan" />
-                  <h3 className="success-title">Message Sent!</h3>
-                  <p className="success-desc">
-                    Thank you for reaching out. I have received your message and will get back to you within 24 hours.
-                  </p>
-                  <Magnetic>
-                    <button
-                      onClick={() => setIsSubmitted(false)}
-                      className="btn btn-primary"
-                    >
-                      Send Another Message
-                    </button>
-                  </Magnetic>
+          {/* Right Column: Sentence Form or Success State */}
+          <div className="contact-form-column">
+            {isSubmitted ? (
+              <div className="sentence-success-state">
+                <h3 className="success-heading">Message sent.</h3>
+                <p className="success-paragraph">
+                  Thank you for reaching out. I will review your details and get back to you within 24 hours to get things started.
+                </p>
+                <button 
+                  type="button" 
+                  onClick={() => setIsSubmitted(false)}
+                  className="sentence-reset-btn"
+                >
+                  — SEND ANOTHER MESSAGE
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="sentence-contact-form">
+                <div className="sentence-container">
+                  My name is <InlineInput id="name" value={formData.name} onChange={handleChange} placeholder="YOUR FULL NAME" aria-label="Your full name" /> and I have a <InlineInput id="project" value={formData.project} onChange={handleChange} placeholder="WEBSITE, FULL-TIME JOB, ETC." aria-label="Your website or job details" /> that needs help. You can reach me at <InlineInput id="email" type="email" value={formData.email} onChange={handleChange} placeholder="YOUR EMAIL ADDRESS" aria-label="Your email address" /> to get things started.
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="contact-form">
-                  <div className="form-group">
-                    <label htmlFor="name" className={formData.name ? 'active' : ''}>Full Name</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={errors.name ? 'input-error' : ''}
-                      placeholder="Your Name"
-                    />
-                    {errors.name && <span className="error-text">{errors.name}</span>}
-                  </div>
 
-                  <div className="form-group">
-                    <label htmlFor="email" className={formData.email ? 'active' : ''}>Email Address</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={errors.email ? 'input-error' : ''}
-                      placeholder="email@example.com"
-                    />
-                    {errors.email && <span className="error-text">{errors.email}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="message" className={formData.message ? 'active' : ''}>Your Message</label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows="5"
-                      value={formData.message}
-                      onChange={handleChange}
-                      className={errors.message ? 'input-error' : ''}
-                      placeholder="Hello! Let's discuss..."
-                    ></textarea>
-                    {errors.message && <span className="error-text">{errors.message}</span>}
-                  </div>
-
-                  <Magnetic>
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-submit"
-                      disabled={isSubmitting}
-                      style={{ width: 'auto', display: 'inline-flex' }}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="spinner"></span> Sending...
-                        </>
-                      ) : (
-                        <>
-                          Send Message <Send size={16} />
-                        </>
-                      )}
-                    </button>
-                  </Magnetic>
-                </form>
-              )}
-            </GlassCard>
+                <div className="form-submit-row">
+                  <button type="submit" className="sentence-submit-btn" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <span className="inline-spinner"></span> SENDING...
+                      </>
+                    ) : (
+                      <>
+                        — SEND INFO
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
+
         </div>
       </motion.div>
     </section>

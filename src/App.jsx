@@ -37,7 +37,7 @@ function App() {
       <div className={`global-mouse-glow ${glowVisible ? 'visible' : ''}`} />
 
       <Navbar />
-      
+
       <main>
         {/* All sections rendered in order on a single page */}
         <Hero />
@@ -53,15 +53,8 @@ function App() {
       <footer className="footer glass-panel">
         <div className="container footer-container">
           <p className="footer-copyright">
-            &copy; {new Date().getFullYear()} Sakib Al Mahamud. Built with React & Vite.
+            &copy; {new Date().getFullYear()} Sakib Al Mahamud.
           </p>
-          <div className="footer-links">
-            <a href="#home" className="footer-link">Home</a>
-            <a href="#about" className="footer-link">About</a>
-            <a href="#projects" className="footer-link">Projects</a>
-            <a href="#certificates" className="footer-link">Certificates</a>
-            <a href="#contact" className="footer-link">Contact</a>
-          </div>
         </div>
       </footer>
 
