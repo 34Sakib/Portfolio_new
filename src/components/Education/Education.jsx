@@ -1,8 +1,29 @@
-import React from 'react';
-import { BookOpen, Check } from 'lucide-react';
+import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import GlassCard from '../ui/GlassCard';
 import { educationData } from '../../data/education';
+
+// Logo Sub-component with image fallback
+const EducationLogo = ({ logo, alt, initial, institution }) => {
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <div className="education-card-logo-badge" title={institution}>
+      {logo && !hasError ? (
+        <img
+          src={logo}
+          alt={alt || `${institution} logo`}
+          className="education-card-logo-img"
+          onError={() => setHasError(true)}
+          loading="lazy"
+        />
+      ) : (
+        <span className="education-card-logo-initial">
+          {initial || (institution ? institution.charAt(0) : 'E')}
+        </span>
+      )}
+    </div>
+  );
+};
 
 export const Education = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -13,101 +34,131 @@ export const Education = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
         delayChildren: 0.1
       }
     }
   };
 
-  const lineVariants = {
-    hidden: { height: 0 },
-    visible: {
-      height: '100%',
-      transition: { duration: 1.2, ease: "easeOut" }
-    }
-  };
-
-  const itemVariants = shouldReduceMotion
+  const cardVariants = shouldReduceMotion
     ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
     : {
-        hidden: { opacity: 0, y: 25 },
+        hidden: { opacity: 0, y: 30 },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
+          transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
         }
       };
 
-  const nodeVariants = shouldReduceMotion
-    ? { hidden: { scale: 0.5 }, visible: { scale: 1 } }
+  // Ambient blob motion (disabled if reduced motion)
+  const blob1Variants = shouldReduceMotion
+    ? {}
     : {
-        hidden: { scale: 0, opacity: 0 },
-        visible: {
-          scale: 1,
-          opacity: 1,
-          transition: { type: "spring", stiffness: 300, damping: 20, delay: 0.2 }
+        animate: {
+          x: [0, 25, -15, 0],
+          y: [0, -30, 20, 0],
+          scale: [1, 1.08, 0.95, 1],
+          transition: { duration: 18, repeat: Infinity, ease: 'easeInOut' }
+        }
+      };
+
+  const blob2Variants = shouldReduceMotion
+    ? {}
+    : {
+        animate: {
+          x: [0, -30, 20, 0],
+          y: [0, 25, -20, 0],
+          scale: [1, 0.92, 1.05, 1],
+          transition: { duration: 22, repeat: Infinity, ease: 'easeInOut' }
         }
       };
 
   return (
-    <section id="education" className="education-section">
+    <section id="education" className="education-glass-section">
+      {/* Ambient Soft Blurred Blobs for Depth */}
       <motion.div 
-        className="container"
+        className="education-ambient-blob blob-1" 
+        variants={blob1Variants} 
+        animate="animate" 
+        aria-hidden="true" 
+      />
+      <motion.div 
+        className="education-ambient-blob blob-2" 
+        variants={blob2Variants} 
+        animate="animate" 
+        aria-hidden="true" 
+      />
+
+      <motion.div 
+        className="container education-glass-container"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
       >
-        <motion.div className="section-header" variants={itemVariants}>
-          <span className="section-subtitle">Qualifications</span>
-          <h2 className="section-title">
-            My <span className="title-bold">Education</span>
+        {/* Centered Heading */}
+        <motion.div className="section-header centered-header" variants={cardVariants}>
+          <span className="section-subtitle education-eyebrow">QUALIFICATIONS</span>
+          <h2 className="section-title education-main-title">
+            <span className="title-bold">My</span> <span className="title-serif-italic">Education</span>
           </h2>
         </motion.div>
 
-        {/* Connected Chronological Timeline */}
-        <div className="education-timeline">
-          {/* Vertical timeline line drawn as you scroll */}
-          {!shouldReduceMotion && (
+        {/* Frosted Glass Floating Cards Stack */}
+        <div className="education-cards-stack">
+          {educationData.map((item) => (
             <motion.div 
-              className="timeline-line" 
-              variants={lineVariants}
-            />
-          )}
+              key={item.id} 
+              className="education-frosted-card"
+              variants={cardVariants}
+              whileHover={shouldReduceMotion ? {} : { y: -4 }}
+            >
+              {/* Card Inner Layout */}
+              <div className="education-card-inner">
+                {/* Left: Circular Logo Badge */}
+                <div className="education-card-logo-wrapper">
+                  <EducationLogo 
+                    logo={item.logo}
+                    alt={item.alt}
+                    initial={item.initial}
+                    institution={item.institution}
+                  />
+                </div>
 
-          {educationData.map((edu, idx) => (
-            <div key={idx} className="timeline-item">
-              {/* Timeline dot node */}
-              <motion.div 
-                className="timeline-node"
-                variants={nodeVariants}
-              >
-                <BookOpen size={14} />
-              </motion.div>
-
-              {/* Card content */}
-              <motion.div 
-                className="timeline-content"
-                variants={itemVariants}
-              >
-                <GlassCard className="education-card">
-                  <div className="education-header-block">
-                    <span className="education-year">{edu.year}</span>
-                    <h3 className="education-degree">{edu.degree}</h3>
-                    <h4 className="education-school">{edu.school}</h4>
+                {/* Right: Content & Details */}
+                <div className="education-card-content">
+                  {/* Metadata line: Date range • Duration • Location */}
+                  <div className="education-card-meta">
+                    <span className="meta-date">{item.dateRange}</span>
+                    {item.duration && <span className="meta-dot">•</span>}
+                    {item.duration && <span className="meta-duration">{item.duration}</span>}
+                    {item.location && <span className="meta-dot">•</span>}
+                    {item.location && <span className="meta-location">{item.location}</span>}
                   </div>
 
-                  <ul className="education-achievements-list">
-                    {edu.achievements.map((ach, aIdx) => (
-                      <li key={aIdx} className="education-achievement-item">
-                        <Check size={14} className="achievement-icon" />
-                        <span className="text">{ach}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </GlassCard>
-              </motion.div>
-            </div>
+                  {/* Degree Title */}
+                  <h3 className="education-card-degree">{item.degree}</h3>
+
+                  {/* Institution Name */}
+                  <h4 className="education-card-institution">{item.institution}</h4>
+
+                  {/* Row of Pill-shaped Chips */}
+                  {Array.isArray(item.chips) && item.chips.length > 0 && (
+                    <div className="education-card-chips-row">
+                      {item.chips.map((chipText, cIdx) => (
+                        <span 
+                          key={cIdx} 
+                          className={`education-pill-chip ${cIdx === 0 ? 'highlight-gpa-chip' : ''}`}
+                        >
+                          {chipText}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </motion.div>

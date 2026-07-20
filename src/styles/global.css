@@ -1731,21 +1731,53 @@ a {
 
 
 
-/* Education Section Styling */
-.education-section {
-  padding: 100px 0;
-  background: var(--bg-color);
+/* Frosted-Glass Floating Cards Education Section */
+.education-glass-section {
+  padding: 110px 0;
   position: relative;
   overflow: hidden;
   z-index: 1;
+  background: var(--bg-color);
+  transition: background var(--transition-slow);
 }
 
-.education-section-header {
+/* Ambient Soft Blurred Color Blobs */
+.education-ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.education-ambient-blob.blob-1 {
+  width: 480px;
+  height: 480px;
+  top: -120px;
+  left: -100px;
+  background: rgba(240, 130, 74, 0.15);
+}
+
+.education-ambient-blob.blob-2 {
+  width: 420px;
+  height: 420px;
+  bottom: -100px;
+  right: -80px;
+  background: rgba(227, 106, 46, 0.12);
+}
+
+.education-glass-container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Centered Heading */
+.centered-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3.5rem;
 }
 
-.education-subtitle {
+.education-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1753,6 +1785,7 @@ a {
   border: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
   border-radius: var(--radius-full);
+  font-family: var(--font-sans);
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1761,171 +1794,235 @@ a {
   margin-bottom: 1rem;
 }
 
-.education-title {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(2rem, 4.5vw, 3.5rem);
-  color: var(--text-primary);
+.education-main-title {
+  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
   margin: 0;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
-.education-title .title-bold {
+.education-main-title .title-bold {
   font-family: var(--font-sans);
   font-weight: 800;
-  font-style: normal;
-  letter-spacing: -0.03em;
+  color: var(--text-primary);
 }
 
-/* Timeline Layout */
-.education-timeline {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 0;
+.education-main-title .title-serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text-primary);
 }
 
-.education-timeline .timeline-line {
-  position: absolute;
-  left: 30px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--border-color);
-  z-index: 1;
-}
-
-.education-timeline .timeline-item {
-  position: relative;
+/* Stack of Floating Frosted Cards */
+.education-cards-stack {
   display: flex;
-  margin-bottom: 3.5rem;
-  width: 100%;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 780px;
+  margin: 0 auto;
 }
 
-.education-timeline .timeline-item:last-child {
-  margin-bottom: 0;
+/* Glass Card */
+.education-frosted-card {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 20px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.education-timeline .timeline-node {
-  position: absolute;
-  left: 30px;
-  transform: translateX(-50%);
-  width: 38px;
-  height: 38px;
+[data-theme="dark"] .education-frosted-card {
+  background: rgba(31, 27, 21, 0.65);
+  border: 1px solid rgba(243, 236, 225, 0.1);
+  box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.4);
+}
+
+.education-frosted-card:hover {
+  border-color: rgba(240, 130, 74, 0.4);
+  box-shadow: 0 20px 45px -10px rgba(240, 130, 74, 0.15), 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .education-frosted-card:hover {
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(240, 130, 74, 0.2);
+}
+
+.education-card-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.75rem;
+}
+
+/* Left: Circular Logo Badge */
+.education-card-logo-wrapper {
+  flex-shrink: 0;
+}
+
+.education-card-logo-badge {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: var(--surface-card);
-  border: 2px solid var(--border-color);
+  background: #ffffff;
+  padding: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 5;
-  color: var(--text-secondary);
-  transition: all var(--transition-fast);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
-.education-timeline .timeline-node svg {
-  width: 14px;
-  height: 14px;
+.education-frosted-card:hover .education-card-logo-badge {
+  transform: scale(1.05);
+  box-shadow: 0 8px 22px rgba(240, 130, 74, 0.25);
 }
 
-.education-timeline .timeline-item:hover .timeline-node {
-  border-color: var(--primary-accent);
+.education-card-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 50%;
+}
+
+.education-card-logo-initial {
+  font-family: var(--font-sans);
+  font-size: var(--text-xl);
+  font-weight: 800;
   color: var(--primary-accent);
-  transform: translateX(-50%) scale(1.1);
-  box-shadow: 0 0 15px var(--primary-accent-glow);
-}
-
-.education-timeline .timeline-content {
-  margin-left: 80px;
-  width: calc(100% - 80px);
-}
-
-/* Card Styling */
-.education-card {
-  padding: 2.25rem 2.5rem;
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.education-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-color-hover);
-  box-shadow: var(--card-shadow);
-}
-
-.education-header-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 1.5rem;
-}
-
-.education-year {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  font-weight: 700;
-  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-.education-degree {
-  font-size: clamp(1.125rem, 2vw, 1.35rem);
-  color: var(--text-primary);
-  font-weight: 800;
-  margin: 0.25rem 0;
-  line-height: 1.25;
+/* Right: Card Content */
+.education-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
 }
 
-.education-school {
+.education-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.meta-dot {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.education-card-degree {
+  font-family: var(--font-sans);
+  font-size: clamp(1.15rem, 2.2vw, 1.35rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.education-card-institution {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Pill-Shaped Chips Row */
+.education-card-chips-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.education-pill-chip {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+[data-theme="dark"] .education-pill-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(243, 236, 225, 0.12);
+  color: var(--text-primary);
+}
+
+/* Highlighted Stat Pill Chip (e.g. CGPA / GPA) */
+.education-pill-chip.highlight-gpa-chip {
   color: var(--primary-accent);
+  background: rgba(240, 130, 74, 0.12);
+  border: 1px solid rgba(240, 130, 74, 0.3);
   font-weight: 700;
 }
 
-.education-achievements-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.education-achievement-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.education-achievement-item svg {
+[data-theme="dark"] .education-pill-chip.highlight-gpa-chip {
+  background: rgba(240, 130, 74, 0.18);
+  border: 1px solid rgba(240, 130, 74, 0.4);
   color: var(--primary-accent);
-  flex-shrink: 0;
-  margin-top: 0.15rem;
 }
 
-.education-achievement-item .text {
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--text-secondary);
-}
-
-
-
-/* Tablet & Mobile timeline overrides */
-@media (max-width: 768px) {
-  .education-timeline .timeline-line {
-    left: 20px;
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .education-glass-section {
+    padding: 70px 0;
   }
-  .education-timeline .timeline-node {
-    left: 20px;
+
+  .education-cards-stack {
+    gap: 1.25rem;
   }
-  .education-timeline .timeline-content {
-    margin-left: 55px;
-    width: calc(100% - 55px);
+
+  .education-frosted-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 16px;
   }
-  .education-card {
-    padding: 1.75rem 1.5rem;
+
+  .education-card-inner {
+    gap: 1.15rem;
+  }
+
+  .education-card-logo-badge {
+    width: 52px;
+    height: 52px;
+    padding: 6px;
+  }
+
+  .education-card-degree {
+    font-size: 1.1rem;
+  }
+
+  .education-card-institution {
+    font-size: var(--text-sm);
+  }
+
+  .education-pill-chip {
+    font-size: 11px;
+    padding: 0.25rem 0.75rem;
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, AlertCircle } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Magnetic from '../ui/Magnetic';
 
@@ -78,22 +78,71 @@ export const Contact = () => {
   const [formData, setFormData] = useState({ name: '', project: '', email: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
 
-    // Simulate API call
-    setTimeout(() => {
+    const web3Key = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+    const targetEmail = 'sakibalmahamud34@gmail.com';
+
+    try {
+      let response;
+      if (web3Key && web3Key !== 'YOUR_WEB3FORMS_ACCESS_KEY') {
+        // Submit via Web3Forms API
+        response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            access_key: web3Key,
+            name: formData.name,
+            email: formData.email,
+            message: formData.project,
+            subject: `Portfolio Inquiry from ${formData.name}`,
+            from_name: formData.name
+          })
+        });
+      } else {
+        // Fallback: Submit via FormSubmit AJAX endpoint directly to targetEmail
+        response = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            project_details: formData.project,
+            _subject: `New Portfolio Inquiry from ${formData.name}`,
+            _captcha: 'false'
+          })
+        });
+      }
+
+      const data = await response.json();
+      if (response.ok && (data.success === true || data.success === 'true' || data.status === 'success')) {
+        setIsSubmitted(true);
+        setFormData({ name: '', project: '', email: '' });
+      } else {
+        throw new Error(data.message || 'Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      console.error('Contact form submission error:', err);
+      setErrorMessage(err.message || 'Something went wrong while sending your email. Please try again.');
+    } finally {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({ name: '', project: '', email: '' });
-    }, 1500);
+    }
   };
 
   const revealVariants = {
@@ -218,6 +267,13 @@ export const Contact = () => {
                       </>
                     )}
                   </button>
+
+                  {errorMessage && (
+                    <div className="sentence-error-box" role="alert">
+                      <AlertCircle size={16} />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
                 </div>
               </form>
             )}
