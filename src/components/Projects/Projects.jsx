@@ -45,9 +45,10 @@ const GithubIcon = ({ size = 20, ...props }) => (
   </svg>
 );
 
-// Brand theme color configuration mapping
 const projectColorMap = {
+  'from-emerald-500 to-teal-600': { primary: '#10b981', secondary: '#0d9488', glow: 'rgba(16, 185, 129, 0.15)' },
   'from-teal-500 to-emerald-500': { primary: '#14b8a6', secondary: '#10b981', glow: 'rgba(20, 184, 166, 0.15)' },
+  'from-amber-600 to-orange-700': { primary: '#d97706', secondary: '#c2410c', glow: 'rgba(217, 119, 6, 0.15)' },
   'from-blue-500 to-cyan-500': { primary: '#3b82f6', secondary: '#06b6d4', glow: 'rgba(59, 130, 246, 0.15)' },
   'from-indigo-500 to-blue-500': { primary: '#6366f1', secondary: '#3b82f6', glow: 'rgba(99, 102, 241, 0.15)' },
   'from-purple-500 to-pink-500': { primary: '#a855f7', secondary: '#ec4899', glow: 'rgba(168, 85, 247, 0.15)' },
@@ -69,7 +70,10 @@ const getTagIcon = (tagName) => {
   if (name.includes('postgres')) return <Database size={12} className="tag-icon text-db" style={{ color: '#336791' }} />;
   if (name.includes('api')) return <Globe size={12} className="tag-icon text-api" style={{ color: '#f59e0b' }} />;
   if (name.includes('php')) return <Cpu size={12} className="tag-icon text-php" style={{ color: '#777bb4' }} />;
-  if (name.includes('bootstrap')) return <Layers size={12} className="tag-icon text-tailwind" style={{ color: '#38bdf8' }} />;
+  if (name.includes('bootstrap') || name.includes('tailwind')) return <Layers size={12} className="tag-icon text-tailwind" style={{ color: '#38bdf8' }} />;
+  if (name.includes('vite')) return <Flame size={12} className="tag-icon text-vite" style={{ color: '#646cff' }} />;
+  if (name.includes('zustand')) return <Cpu size={12} className="tag-icon text-zustand" style={{ color: '#ff9900' }} />;
+  if (name.includes('i18n')) return <Globe size={12} className="tag-icon text-i18n" style={{ color: '#10b981' }} />;
   if (name.includes('typescript')) return <FileCode size={12} className="tag-icon text-ts" style={{ color: '#3178c6' }} />;
   if (name.includes('javascript') || name.includes('jquery')) return <Code size={12} className="tag-icon text-js" style={{ color: '#f7df1e' }} />;
   if (name.includes('nestjs')) return <Server size={12} className="tag-icon text-node" style={{ color: '#e0234e' }} />;

@@ -1,7 +1,45 @@
 import codexlabasia from '../assets/codexlabasia.png';
 import kino from '../assets/kino.png';
+import nuvara from '../assets/nuvara.png';
+import mentorsGlobal from '../assets/mentors_global.png';
 
-export const projectsData = [
+const rawProjectsData = [
+  {
+    id: 9,
+    title: "Mentors' Global",
+    description: "Comprehensive education management platform featuring IELTS and PTE course dashboards, online mock testing, and interactive student review systems.",
+    features: [
+      "Designed and developed the comprehensive admin dashboard panel to manage IELTS & PTE course curricula and scheduling.",
+      "Built interactive mock exam test environments and practice modules for student assessment and grading.",
+      "Developed secure RESTful API endpoints using Laravel to seamlessly integrate with a React.js client interface.",
+      "Optimized MySQL relational database models to store and evaluate mock test results, answers, and student progress metrics."
+    ],
+    image: mentorsGlobal,
+    tags: ["Laravel 10", "React.js", "MySQL", "REST API", "Bootstrap 5"],
+    demoLink: "https://mentorsglobal.com.au/",
+    icon: "GraduationCap",
+    color: "from-teal-500 to-emerald-500",
+    bgColor: "bg-teal-50"
+  },
+  {
+    id: 11,
+    title: "Nuvara E-commerce Platform",
+    description: "Full-stack modern e-commerce platform with multi-language RTL support, promo code engine, and dynamic theme customization.",
+    features: [
+      "Built a full-stack e-commerce web app with a React 19 SPA frontend and Laravel RESTful API backend.",
+      "Implemented secure user authentication, product catalog, customer reviews, wishlist management, and order processing.",
+      "Developed an interactive cart and checkout workflow with real-time promo code engine powered by Zustand.",
+      "Integrated multi-language localization (i18n) supporting English, Spanish, Bengali, and native RTL Arabic layout.",
+      "Designed a mobile-responsive UI with light/dark theme toggle, Framer Motion animations, and an admin dashboard."
+    ],
+    image: nuvara,
+    tags: ["React 19", "Vite", "Laravel 12", "Tailwind CSS", "Zustand", "i18next", "MySQL"],
+    githubLink: "https://github.com/34Sakib/Nuvara",
+    demoLink: "#",
+    icon: "ShoppingBag",
+    color: "from-emerald-500 to-teal-600",
+    bgColor: "bg-emerald-50"
+  },
   {
     id: 10,
     title: "Kino Atelier",
@@ -20,23 +58,6 @@ export const projectsData = [
     icon: "ShoppingBag",
     color: "from-amber-600 to-orange-700",
     bgColor: "bg-amber-50"
-  },
-  {
-    id: 9,
-    title: "Mentors' Global",
-    description: "Comprehensive education management platform featuring IELTS and PTE course dashboards, online mock testing, and interactive student review systems.",
-    features: [
-      "Designed and developed the comprehensive admin dashboard panel to manage IELTS & PTE course curricula and scheduling.",
-      "Built interactive mock exam test environments and practice modules for student assessment and grading.",
-      "Developed secure RESTful API endpoints using Laravel to seamlessly integrate with a React.js client interface.",
-      "Optimized MySQL relational database models to store and evaluate mock test results, answers, and student progress metrics."
-    ],
-    image: "https://lh3.googleusercontent.com/d/1fPgL0H1kOFlZroXzbq_1F4JIJaAqtAJT",
-    tags: ["Laravel 10", "React.js", "MySQL", "REST API", "Bootstrap 5"],
-    demoLink: "https://mentorsglobal.com.au/",
-    icon: "GraduationCap",
-    color: "from-teal-500 to-emerald-500",
-    bgColor: "bg-teal-50"
   },
   {
     id: 1,
@@ -144,3 +165,18 @@ export const projectsData = [
     bgColor: "bg-indigo-50"
   }
 ];
+
+// Helper to ensure Mentors' Global is ALWAYS pinned as the first project (index 0)
+const ensureMentorsGlobalFirst = (projects) => {
+  const mentorsIndex = projects.findIndex(
+    (p) => p.id === 9 || (p.title && p.title.toLowerCase().includes('mentors'))
+  );
+  if (mentorsIndex > 0) {
+    const copy = [...projects];
+    const [mentorsItem] = copy.splice(mentorsIndex, 1);
+    return [mentorsItem, ...copy];
+  }
+  return projects;
+};
+
+export const projectsData = ensureMentorsGlobalFirst(rawProjectsData);

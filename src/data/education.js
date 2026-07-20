@@ -11,9 +11,7 @@ export const educationData = [
     location: 'Dhaka, Bangladesh',
     chips: [
       'CGPA 3.61 / 4.00',
-      'Software Engineering',
-      'Database Architectures',
-      'Full-Stack Web'
+      'Software Engineering'
     ],
     logo: aiubLogo,
     alt: 'American International University – Bangladesh logo',
@@ -28,9 +26,7 @@ export const educationData = [
     location: 'Dhaka, Bangladesh',
     chips: [
       'GPA 4.56 / 5.00',
-      'Science Background',
-      'Higher Mathematics',
-      'Physics'
+      'Science Background'
     ],
     logo: bepzaLogo,
     alt: 'Bepza Public High School & College logo',
