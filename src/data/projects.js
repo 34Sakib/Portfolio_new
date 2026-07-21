@@ -1,6 +1,6 @@
 import codexlabasia from '../assets/codexlabasia.png';
 import kino from '../assets/kino.png';
-import nuvara from '../assets/nuvara.png';
+import nuvara from '../assets/Nuvara.png';
 import mentorsGlobal from '../assets/mentors_global.png';
 
 const rawProjectsData = [
