@@ -2,6 +2,7 @@ import codexlabasia from '../assets/codexlabasia.png';
 import kino from '../assets/kino.png';
 import nuvara from '../assets/Nuvara.png';
 import mentorsGlobal from '../assets/mentors_global.png';
+import erp from '../assets/erp.png';
 
 const rawProjectsData = [
   {
@@ -20,6 +21,25 @@ const rawProjectsData = [
     icon: "GraduationCap",
     color: "from-teal-500 to-emerald-500",
     bgColor: "bg-teal-50"
+  },
+  {
+    id: 12,
+    title: "Enterprise ERP & HR Management System",
+    description: "Full-stack enterprise resource planning platform featuring multi-company RBAC, automated payroll, HRIS, CRM, inventory, and financial accounting modules.",
+    features: [
+      "Architected a full-stack Enterprise Resource Planning (ERP) platform utilizing Laravel 12, Blade components, and Tailwind CSS 4.",
+      "Built comprehensive HRIS & Workforce modules including employee directory, web punch attendance, shift scheduling, and leave approvals.",
+      "Engineered an automated payroll system with customizable salary structures, loans/advances management, and PDF payslip generation.",
+      "Integrated core enterprise operational tools: Inventory with multi-warehouse support, CRM deals pipeline, and Project time-tracking.",
+      "Designed role-based access control (RBAC) with Spatie permissions, multi-tenant company data scoping, and activity audit logging."
+    ],
+    image: erp,
+    tags: ["Laravel 12", "PHP 8.2", "Tailwind CSS 4", "Vite 7", "Spatie RBAC", "Blade", "DataTables", "SQLite / MySQL"],
+    githubLink: "https://github.com/34Sakib/ERP",
+    demoLink: "#",
+    icon: "Building2",
+    color: "from-emerald-500 to-teal-600",
+    bgColor: "bg-emerald-50"
   },
   {
     id: 11,
