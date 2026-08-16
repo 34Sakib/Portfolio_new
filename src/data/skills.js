@@ -22,6 +22,7 @@ export const skillsData = [
     category: "Tools & Soft Skills",
     skills: [
       { name: "Git & GitHub", level: 90, icon: "Git" },
+      { name: "GitLab", level: 90, icon: "Git" },
       { name: "Postman", level: 85, icon: "RestApi" },
       { name: "VS Code", level: 95, icon: "Vite" },
       { name: "Problem Solving", level: 90, icon: "React" }

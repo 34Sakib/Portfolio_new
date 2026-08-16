@@ -8,7 +8,7 @@ export const experienceData = [
     location: "Dhaka, Bangladesh",
     type: "Full-Time",
     description: "Architecting and maintaining full-stack features for the Mentors' Global education platform. Designing modern React interfaces coupled with highly secure Laravel REST APIs.",
-    tags: ["Laravel", "React.js", "PHP", "MySQL", "JavaScript"]
+    tags: ["Laravel", "React.js", "PHP", "MySQL", "JavaScript", "GitLab"]
   },
   {
     period: "December 2025 – May 2026",

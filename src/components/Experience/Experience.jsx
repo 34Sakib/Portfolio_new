@@ -12,7 +12,8 @@ import {
   Database, 
   Terminal, 
   Lock, 
-  Zap 
+  Zap,
+  GitBranch 
 } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { experienceData } from '../../data/experience';
@@ -33,6 +34,7 @@ const getTagIcon = (tagName) => {
   if (name.includes('sanctum') || name.includes('spatie') || name.includes('auth')) return <Lock size={12} className="tag-icon text-auth" style={{ color: '#10b981', marginRight: '0.35rem' }} />;
   if (name.includes('vite')) return <Zap size={12} className="tag-icon text-vite" style={{ color: '#f59e0b', marginRight: '0.35rem' }} />;
   if (name.includes('blade') || name.includes('html') || name.includes('css')) return <Layers size={12} className="tag-icon text-html" style={{ color: '#f0533c', marginRight: '0.35rem' }} />;
+  if (name.includes('git')) return <GitBranch size={12} className="tag-icon text-git" style={{ color: '#fc6d26', marginRight: '0.35rem' }} />;
   return <Terminal size={12} className="tag-icon text-terminal" style={{ marginRight: '0.35rem' }} />;
 };
 

@@ -27,6 +27,15 @@ export const certificatesData = [
     verifyLink: "https://learn.microsoft.com/api/achievements/share/en-us/SAKIBALMAHAMUD-2258/U7W62VL3?sharingId=F5DD6607D36D0F71"
   },
   {
+    title: "PHP Laravel: Build Travel Agency Management System",
+    issuer: "Udemy",
+    date: "2026",
+    category: "Backend Development",
+    credentialId: "UC-0de7ecd3-04de-4d3b-aed5-a47159abf6d3",
+    image: "https://lh3.googleusercontent.com/d/1gxYLuRkOctiwhC6FgaUNpNd-2_TPcAMx",
+    verifyLink: "https://ude.my/UC-0de7ecd3-04de-4d3b-aed5-a47159abf6d3"
+  },
+  {
     title: "PHP with MySQL: Build Complete Coffee Shop System",
     issuer: "Udemy",
     date: "2025",

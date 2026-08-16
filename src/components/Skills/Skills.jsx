@@ -48,6 +48,8 @@ const getSkillIcon = (iconName) => {
     case 'Postgresql':
       return <Database className="skill-icon-svg text-db" />;
     case 'Git':
+    case 'Gitlab':
+    case 'GitLab':
       return <GitBranch className="skill-icon-svg text-git" />;
     case 'Docker':
       return <Server className="skill-icon-svg text-docker" />;
