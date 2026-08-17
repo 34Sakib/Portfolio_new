@@ -45,6 +45,15 @@ export const certificatesData = [
     verifyLink: "https://www.udemy.com/certificate/UC-839428f7-2118-4c5d-9617-e8f0c5e3d66a/"
   },
   {
+    title: "Introduction to Front-End Development",
+    issuer: "Meta",
+    date: "2026",
+    category: "Frontend Development",
+    credentialId: "719766121a78afef4bcde5c0ec25a0e8",
+    image: "https://lh3.googleusercontent.com/d/1R60l7o2okldTSmKskzUGvbN99bYpFC62",
+    verifyLink: "https://coursera.org/share/719766121a78afef4bcde5c0ec25a0e8"
+  },
+  {
     title: "JavaScript Essentials 1",
     issuer: "Cisco Networking Academy",
     date: "2025",
