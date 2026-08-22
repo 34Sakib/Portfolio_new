@@ -3,6 +3,11 @@ import kino from '../assets/kino.png';
 import nuvara from '../assets/Nuvara.png';
 import mentorsGlobal from '../assets/mentors_global.png';
 import erp from '../assets/erp.png';
+import fruitmart from '../assets/fruitmart.png';
+import crmEcommerce from '../assets/crm_ecommerce.png';
+import coffeeBlend from '../assets/coffee_blend.png';
+import hospitalManagement from '../assets/hospital_management.png';
+import onlineLearning from '../assets/online_learning.png';
 
 const rawProjectsData = [
   {
@@ -89,7 +94,7 @@ const rawProjectsData = [
       "Developed a custom admin dashboard for product and vendor management.",
       "Designed responsive UI for mobile and desktop users."
     ],
-    image: "https://i.postimg.cc/BQP7Pbdv/image.png",
+    image: fruitmart,
     tags: ["Laravel 10", "MySQL", "JavaScript", "Bootstrap 5"],
     githubLink: "https://github.com/34Sakib/Fruit-Page",
     demoLink: "#",
@@ -125,7 +130,7 @@ const rawProjectsData = [
       "Implemented secure authentication and role-based access for users and administrators.",
       "Integrated product inventory management, order tracking, and admin dashboard functionalities."
     ],
-    image: "https://i.postimg.cc/rFJVWtjt/image.png",
+    image: crmEcommerce,
     tags: ["Laravel 10", "React.js", "REST API", "MySQL", "Bootstrap 5"],
     githubLink: "https://github.com/34Sakib/CRM-E-Commerce",
     demoLink: "#",
@@ -142,7 +147,7 @@ const rawProjectsData = [
       "Developed admin dashboard for menu and content management.",
       "Designed responsive pages for menu, services, about, and contact sections."
     ],
-    image: "https://i.postimg.cc/C5htVd85/image.png",
+    image: coffeeBlend,
     tags: ["PHP", "MySQL", "JavaScript", "Bootstrap 5"],
     githubLink: "https://github.com/34Sakib/Coffee_Shop",
     demoLink: "#",
@@ -159,7 +164,7 @@ const rawProjectsData = [
       "Implemented secure registration pipelines and patient scheduling controls.",
       "Built clean dashboard control panels using Bootstrap 5 for administrators, doctors, and patients."
     ],
-    image: "https://i.postimg.cc/wjYPWY5W/image.png",
+    image: hospitalManagement,
     tags: ["PHP", "Laravel", "Bootstrap", "MySQL"],
     githubLink: "https://github.com/34Sakib/Hospital_Management",
     demoLink: "#",
@@ -176,7 +181,7 @@ const rawProjectsData = [
       "Configured secure JWT role-based authentication guards.",
       "Structured entity relationships and database operations with PostgreSQL using TypeORM."
     ],
-    image: "https://i.postimg.cc/sfBpvQFW/Screenshot-2025-06-04-155348.png",
+    image: onlineLearning,
     tags: ["TypeScript", "NestJS", "PostgreSQL", "TypeORM"],
     githubLink: "https://github.com/34Sakib/Online-Learning-System",
     demoLink: "#",
