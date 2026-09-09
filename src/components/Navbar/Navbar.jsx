@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import ThemeToggle from '../ui/ThemeToggle';
+import AudioToggle from '../ui/AudioToggle';
 import Magnetic from '../ui/Magnetic';
 
 const NAV_ITEMS = [
@@ -135,6 +136,11 @@ export const Navbar = () => {
         </nav>
 
         <div className="navbar-actions">
+          <Magnetic range={25}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <AudioToggle />
+            </div>
+          </Magnetic>
           <Magnetic range={25}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <ThemeToggle />
