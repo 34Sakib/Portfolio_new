@@ -2,136 +2,113 @@ import React, { createContext, useContext, useState, useEffect, useRef, useCallb
 
 const AudioContext = createContext(null);
 
-const TARGET_VOLUME = 0.70; // Increased volume for rich, clear ambient sound
-const FADE_IN_DURATION = 600; // ms
-const FADE_OUT_DURATION = 400; // ms
+const TARGET_VOLUME = 0.70;
 
 export const AudioProvider = ({ children }) => {
-  // Starts active by default so animation and playback run on page entry
-  const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef(null);
-  const fadeIntervalRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(true);
   const isUserPausedRef = useRef(false);
 
-  // Smooth volume fading utility
-  const fadeVolume = useCallback((targetVol, duration, onComplete) => {
-    if (!audioRef.current) return;
-    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-
-    const audio = audioRef.current;
-    const startVol = audio.volume;
-    const delta = targetVol - startVol;
-    const stepTime = 20;
-    const steps = Math.max(1, Math.floor(duration / stepTime));
-    const stepDelta = delta / steps;
-    let currentStep = 0;
-
-    fadeIntervalRef.current = setInterval(() => {
-      currentStep++;
-      const newVol = Math.min(1, Math.max(0, startVol + stepDelta * currentStep));
-      audio.volume = newVol;
-
-      if (currentStep >= steps) {
-        audio.volume = targetVol;
-        clearInterval(fadeIntervalRef.current);
-        fadeIntervalRef.current = null;
-        if (onComplete) onComplete();
-      }
-    }, stepTime);
-  }, []);
-
   const playAudio = useCallback(() => {
-    if (!audioRef.current) return;
     const audio = audioRef.current;
+    if (!audio) return;
     isUserPausedRef.current = false;
-    setIsPlaying(true);
+    audio.volume = TARGET_VOLUME;
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
-          fadeVolume(TARGET_VOLUME, FADE_IN_DURATION);
+          setIsPlaying(true);
         })
-        .catch(() => {
-          // If browser policy blocks unprompted autoplay, keep isPlaying true
-          // so the animation shows, and unlock audio on the very first gesture
+        .catch((err) => {
+          console.warn('Playback deferred until user interaction:', err);
         });
     }
-  }, [fadeVolume]);
+  }, []);
 
   const pauseAudio = useCallback(() => {
-    if (!audioRef.current) return;
     const audio = audioRef.current;
+    if (!audio) return;
     isUserPausedRef.current = true;
+    audio.pause();
+    setIsPlaying(false);
+  }, []);
 
-    fadeVolume(0, FADE_OUT_DURATION, () => {
-      audio.pause();
-      setIsPlaying(false);
-    });
-  }, [fadeVolume]);
-
+  // Single-click toggle: always sync with actual audio playback state
   const toggleAudio = useCallback(() => {
-    if (isPlaying) {
-      pauseAudio();
-    } else {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (audio.paused) {
       playAudio();
+    } else {
+      pauseAudio();
     }
-  }, [isPlaying, playAudio, pauseAudio]);
+  }, [playAudio, pauseAudio]);
 
-  // Initialize audio element and handle auto-play on entry
   useEffect(() => {
-    const audio = new Audio('/audio/metabole-ambient.mp3');
-    audio.loop = true;
-    audio.preload = 'auto';
-    audio.volume = 0;
-    audioRef.current = audio;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    // 1. Attempt immediate autoplay when page loads
-    const initialPromise = audio.play();
-    if (initialPromise !== undefined) {
-      initialPromise
-        .then(() => {
-          fadeVolume(TARGET_VOLUME, FADE_IN_DURATION);
-        })
-        .catch(() => {
-          // Autoplay blocked by browser policy until interaction
-        });
+    audio.volume = TARGET_VOLUME;
+    audio.muted = false;
+
+    // 1. Attempt direct unmuted playback on initial website entry
+    const p = audio.play();
+    if (p !== undefined) {
+      p.then(() => {
+        setIsPlaying(true);
+        removeGlobalListeners();
+      }).catch(() => {
+        // Browser requires first user activation before audio output is permitted
+        setIsPlaying(true);
+      });
     }
 
-    // 2. Unlock audio immediately on the first user interaction (scroll, click, touch, key)
-    const handleFirstInteraction = () => {
-      if (!isUserPausedRef.current && audioRef.current) {
-        const p = audioRef.current.play();
-        if (p !== undefined) {
-          p.then(() => {
-            fadeVolume(TARGET_VOLUME, FADE_IN_DURATION);
-          }).catch(() => {});
+    // 2. Global activation: ANY click, tap, or key anywhere on the website unlocks sound
+    const handleGlobalActivation = (e) => {
+      if (isUserPausedRef.current) return;
+      // If user clicked the toggle button directly, toggleAudio handles it
+      if (e && e.target && e.target.closest && e.target.closest('.audio-toggle-btn')) {
+        return;
+      }
+
+      if (audio) {
+        audio.muted = false;
+        audio.volume = TARGET_VOLUME;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+              removeGlobalListeners();
+            })
+            .catch(() => {});
         }
       }
-      removeInteractionListeners();
     };
 
-    const removeInteractionListeners = () => {
-      window.removeEventListener('pointerdown', handleFirstInteraction);
-      window.removeEventListener('touchstart', handleFirstInteraction);
-      window.removeEventListener('scroll', handleFirstInteraction);
-      window.removeEventListener('keydown', handleFirstInteraction);
-      window.removeEventListener('wheel', handleFirstInteraction);
+    const removeGlobalListeners = () => {
+      window.removeEventListener('pointerdown', handleGlobalActivation, { capture: true });
+      window.removeEventListener('click', handleGlobalActivation, { capture: true });
+      window.removeEventListener('touchstart', handleGlobalActivation, { capture: true });
+      window.removeEventListener('keydown', handleGlobalActivation, { capture: true });
+      document.removeEventListener('pointerdown', handleGlobalActivation, { capture: true });
+      document.removeEventListener('click', handleGlobalActivation, { capture: true });
     };
 
-    window.addEventListener('pointerdown', handleFirstInteraction, { passive: true, once: true });
-    window.addEventListener('touchstart', handleFirstInteraction, { passive: true, once: true });
-    window.addEventListener('scroll', handleFirstInteraction, { passive: true, once: true });
-    window.addEventListener('keydown', handleFirstInteraction, { passive: true, once: true });
-    window.addEventListener('wheel', handleFirstInteraction, { passive: true, once: true });
+    window.addEventListener('pointerdown', handleGlobalActivation, { capture: true, passive: true });
+    window.addEventListener('click', handleGlobalActivation, { capture: true, passive: true });
+    window.addEventListener('touchstart', handleGlobalActivation, { capture: true, passive: true });
+    window.addEventListener('keydown', handleGlobalActivation, { capture: true, passive: true });
+    document.addEventListener('pointerdown', handleGlobalActivation, { capture: true, passive: true });
+    document.addEventListener('click', handleGlobalActivation, { capture: true, passive: true });
 
     return () => {
-      removeInteractionListeners();
-      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-      audio.pause();
-      audioRef.current = null;
+      removeGlobalListeners();
     };
-  }, [fadeVolume]);
+  }, []);
 
   return (
     <AudioContext.Provider
@@ -142,6 +119,20 @@ export const AudioProvider = ({ children }) => {
         pauseAudio
       }}
     >
+      <audio
+        ref={audioRef}
+        src="/audio/metabole-ambient.mp3"
+        loop
+        autoPlay
+        playsInline
+        preload="auto"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => {
+          if (isUserPausedRef.current) {
+            setIsPlaying(false);
+          }
+        }}
+      />
       {children}
     </AudioContext.Provider>
   );
