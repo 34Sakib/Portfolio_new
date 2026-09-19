@@ -107,7 +107,7 @@ export const About = () => {
             <motion.div className="about-quote-card" variants={itemVariants}>
               <span className="quote-mark">“</span>
               <p className="quote-text">
-                Engineering clean code and scalable architectures to solve real-world problems.
+                Good code speaks for itself, great code disappears into the experience.
               </p>
             </motion.div>
 
@@ -144,18 +144,18 @@ export const About = () => {
             </motion.h3>
 
             <motion.p className="about-desc" variants={itemVariants}>
-              I am a Full Stack Developer with 1.5+ years of professional experience building scalable web applications using PHP, Laravel, and React.js. I specialize in RESTful API development, authentication systems, role-based access control, and database design.
+              I'm a Full Stack Developer with 1.5+ years of experience building scalable, production-ready web applications with PHP, Laravel, and React.js. My focus areas include RESTful API design, secure authentication systems, role-based access control, and clean, efficient database architecture.
             </motion.p>
 
             <motion.p className="about-desc" variants={itemVariants}>
-              I am passionate about writing clean, maintainable code, optimizing performance, and designing intuitive interfaces. Through my work with local and international products, I deliver complete software systems that translate complex goals into solid user experiences.
+              I care about more than just working code, I care about maintainable code. Whether I'm optimizing backend performance or designing an intuitive interface, my goal is always the same: turn complex requirements into software that feels simple to use. I've applied this across both local and international products, delivering complete systems from database to UI.
             </motion.p>
 
             {/* CV View CTA */}
             <motion.div className="about-actions" variants={itemVariants}>
               <Magnetic range={15}>
                 <a
-                  href="https://drive.google.com/file/d/1DD_quXm8SlxdOxRw5TgS3wrPo7Zi1aRc/view?usp=sharing"
+                  href="https://drive.google.com/file/d/1Hf7Rj1IgfsBDmzm46MEyQsxyuI98nhzs/view?usp=sharing"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-solid"
@@ -183,7 +183,7 @@ export const About = () => {
                   </div>
                   <div>
                     <div className="stat-val">
-                      <Counter value={4} suffix="+" />
+                      <Counter value={7} suffix="+" />
                     </div>
                     <div className="stat-lbl">Core Projects</div>
                   </div>
@@ -195,7 +195,7 @@ export const About = () => {
                   </div>
                   <div>
                     <div className="stat-val">
-                      <Counter value={6} />
+                      <Counter value={9} />
                     </div>
                     <div className="stat-lbl">Certifications</div>
                   </div>

@@ -24,8 +24,8 @@ const rawProjectsData = [
     tags: ["Laravel 10", "React.js", "MySQL", "REST API", "Bootstrap 5"],
     demoLink: "https://mentorsglobal.com.au/",
     icon: "GraduationCap",
-    color: "from-teal-500 to-emerald-500",
-    bgColor: "bg-teal-50"
+    color: "from-rose-500 to-red-600",
+    bgColor: "bg-rose-50"
   },
   {
     id: 12,
@@ -43,8 +43,8 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/ERP",
     demoLink: "#",
     icon: "Building2",
-    color: "from-emerald-500 to-teal-600",
-    bgColor: "bg-emerald-50"
+    color: "from-indigo-500 to-violet-600",
+    bgColor: "bg-indigo-50"
   },
   {
     id: 11,
@@ -62,7 +62,7 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/Nuvara",
     demoLink: "#",
     icon: "ShoppingBag",
-    color: "from-emerald-500 to-teal-600",
+    color: "from-teal-500 to-emerald-600",
     bgColor: "bg-emerald-50"
   },
   {
@@ -99,8 +99,8 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/Fruit-Page",
     demoLink: "#",
     icon: "ShoppingCart",
-    color: "from-blue-500 to-cyan-500",
-    bgColor: "bg-blue-50"
+    color: "from-green-600 to-emerald-600",
+    bgColor: "bg-green-50"
   },
   {
     id: 2,
@@ -117,8 +117,8 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/TechSolution_IT",
     demoLink: "#",
     icon: "Laptop",
-    color: "from-indigo-500 to-blue-500",
-    bgColor: "bg-indigo-50"
+    color: "from-sky-500 to-blue-600",
+    bgColor: "bg-sky-50"
   },
   {
     id: 3,
@@ -135,8 +135,8 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/CRM-E-Commerce",
     demoLink: "#",
     icon: "Database",
-    color: "from-purple-500 to-pink-500",
-    bgColor: "bg-purple-50"
+    color: "from-blue-600 to-indigo-600",
+    bgColor: "bg-blue-50"
   },
   {
     id: 4,
@@ -152,7 +152,7 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/Coffee_Shop",
     demoLink: "#",
     icon: "Coffee",
-    color: "from-amber-500 to-yellow-500",
+    color: "from-amber-700 to-yellow-800",
     bgColor: "bg-amber-50"
   },
   {
@@ -169,8 +169,8 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/Hospital_Management",
     demoLink: "#",
     icon: "Award",
-    color: "from-red-500 to-pink-500",
-    bgColor: "bg-red-50"
+    color: "from-teal-500 to-cyan-600",
+    bgColor: "bg-teal-50"
   },
   {
     id: 8,
@@ -186,8 +186,8 @@ const rawProjectsData = [
     githubLink: "https://github.com/34Sakib/Online-Learning-System",
     demoLink: "#",
     icon: "GraduationCap",
-    color: "from-indigo-500 to-purple-500",
-    bgColor: "bg-indigo-50"
+    color: "from-purple-500 to-indigo-600",
+    bgColor: "bg-purple-50"
   }
 ];
 

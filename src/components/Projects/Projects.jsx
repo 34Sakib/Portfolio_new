@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   ShoppingCart, 
   Laptop, 
@@ -6,6 +6,8 @@ import {
   Coffee, 
   Award, 
   GraduationCap, 
+  Building2,
+  ShoppingBag,
   ExternalLink,
   Check,
   Atom, 
@@ -17,18 +19,20 @@ import {
   Globe, 
   Server, 
   Terminal,
-  ChevronLeft,
-  ChevronRight,
   Lock,
-  RotateCw
+  RotateCw,
+  Sparkles,
+  ArrowUpRight,
+  ShieldCheck,
+  Activity
 } from 'lucide-react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion';
 import { projectsData } from '../../data/projects';
 import Badge from '../ui/Badge';
 import Magnetic from '../ui/Magnetic';
 
 // Custom inline SVG GitHub Icon
-const GithubIcon = ({ size = 20, ...props }) => (
+const GithubIcon = ({ size = 18, ...props }) => (
   <svg
     viewBox="0 0 24 24"
     width={size}
@@ -45,20 +49,99 @@ const GithubIcon = ({ size = 20, ...props }) => (
   </svg>
 );
 
-const projectColorMap = {
-  'from-emerald-500 to-teal-600': { primary: '#10b981', secondary: '#0d9488', glow: 'rgba(16, 185, 129, 0.15)' },
-  'from-teal-500 to-emerald-500': { primary: '#14b8a6', secondary: '#10b981', glow: 'rgba(20, 184, 166, 0.15)' },
-  'from-amber-600 to-orange-700': { primary: '#d97706', secondary: '#c2410c', glow: 'rgba(217, 119, 6, 0.15)' },
-  'from-blue-500 to-cyan-500': { primary: '#3b82f6', secondary: '#06b6d4', glow: 'rgba(59, 130, 246, 0.15)' },
-  'from-indigo-500 to-blue-500': { primary: '#6366f1', secondary: '#3b82f6', glow: 'rgba(99, 102, 241, 0.15)' },
-  'from-purple-500 to-pink-500': { primary: '#a855f7', secondary: '#ec4899', glow: 'rgba(168, 85, 247, 0.15)' },
-  'from-amber-500 to-yellow-500': { primary: '#f59e0b', secondary: '#eab308', glow: 'rgba(245, 158, 11, 0.15)' },
-  'from-red-500 to-pink-500': { primary: '#ef4444', secondary: '#ec4899', glow: 'rgba(239, 68, 68, 0.15)' },
-  'from-indigo-500 to-purple-500': { primary: '#6366f1', secondary: '#a855f7', glow: 'rgba(99, 102, 241, 0.15)' }
+// High-fidelity color palettes precisely extracted from the actual project screenshot images
+const projectColorPalette = {
+  9: { // Mentors' Global -> Crimson / Scarlet Red
+    primary: '#E11D48',
+    secondary: '#BE123C',
+    glow: 'rgba(225, 29, 72, 0.28)',
+    accent: '#FDA4AF',
+    category: 'International Education Platform'
+  },
+  12: { // Enterprise ERP -> Electric Violet / Royal Indigo
+    primary: '#6366F1',
+    secondary: '#7C3AED',
+    glow: 'rgba(99, 102, 241, 0.28)',
+    accent: '#C4B5FD',
+    category: 'Enterprise Resource Planning & HRIS'
+  },
+  11: { // Nuvara -> Lush Emerald / Teal Green & Sunny Gold
+    primary: '#0D9488',
+    secondary: '#10B981',
+    glow: 'rgba(13, 148, 136, 0.28)',
+    accent: '#FACC15',
+    category: 'Global Multilingual E-Commerce'
+  },
+  10: { // Kino Atelier -> Champagne Travertine / Amber Oak
+    primary: '#D4A373',
+    secondary: '#B45309',
+    glow: 'rgba(212, 163, 115, 0.28)',
+    accent: '#FEF3C7',
+    category: 'Luxury Handcrafted Home Decor'
+  },
+  1: { // FruitMart (GreenRootMart) -> Fresh Botanical / Leaf Green
+    primary: '#16A34A',
+    secondary: '#15803D',
+    glow: 'rgba(22, 163, 74, 0.28)',
+    accent: '#F59E0B',
+    category: 'Fresh Farm Produce & Organics'
+  },
+  2: { // CodexLabAsia -> Electric Tech Sky Blue & Cyan Circuit
+    primary: '#0284C7',
+    secondary: '#06B6D4',
+    glow: 'rgba(2, 132, 199, 0.28)',
+    accent: '#38BDF8',
+    category: 'IT Solutions & Cloud Consultancy'
+  },
+  3: { // CRM E-Commerce (CodexLabBd) -> Cobalt Royal Blue & Tangerine
+    primary: '#2563EB',
+    secondary: '#EA580C',
+    glow: 'rgba(37, 99, 235, 0.28)',
+    accent: '#10B981',
+    category: 'B2B Enterprise Commerce CRM'
+  },
+  4: { // Coffee Blend -> Roasted Cafe Espresso & Caramel Gold
+    primary: '#C49B63',
+    secondary: '#8C6239',
+    glow: 'rgba(196, 155, 99, 0.28)',
+    accent: '#EED9B3',
+    category: 'Artisanal Cafe Ordering Suite'
+  },
+  6: { // Hospital Management (Chiropractic) -> Clinical Aqua Teal
+    primary: '#00A8B5',
+    secondary: '#0284C7',
+    glow: 'rgba(0, 168, 181, 0.28)',
+    accent: '#67E8F9',
+    category: 'Clinical Healthcare & Appointments'
+  },
+  8: { // Online Learning System -> Electric Violet & Indigo
+    primary: '#8B5CF6',
+    secondary: '#4F46E5',
+    glow: 'rgba(139, 92, 246, 0.28)',
+    accent: '#F43F5E',
+    category: 'EdTech Learning Platform API'
+  }
 };
 
-const getProjectColors = (colorString) => {
-  return projectColorMap[colorString] || { primary: '#6C63FF', secondary: '#00D9FF', glow: 'rgba(108, 99, 255, 0.15)' };
+const getProjectColors = (project) => {
+  if (!project) return { primary: '#f0824a', secondary: '#e36a2e', glow: 'rgba(240, 130, 74, 0.25)', accent: '#fdb48f', category: 'Production Case Study' };
+  if (projectColorPalette[project.id]) return projectColorPalette[project.id];
+  return { primary: '#f0824a', secondary: '#e36a2e', glow: 'rgba(240, 130, 74, 0.25)', accent: '#fdb48f', category: 'Production Case Study' };
+};
+
+// Map project icons dynamically
+const getProjectIcon = (iconName) => {
+  switch (iconName) {
+    case 'GraduationCap': return <GraduationCap size={15} />;
+    case 'Building2': return <Building2 size={15} />;
+    case 'ShoppingBag': return <ShoppingBag size={15} />;
+    case 'ShoppingCart': return <ShoppingCart size={15} />;
+    case 'Laptop': return <Laptop size={15} />;
+    case 'Database': return <Database size={15} />;
+    case 'Coffee': return <Coffee size={15} />;
+    case 'Award': return <Award size={15} />;
+    default: return <Code size={15} />;
+  }
 };
 
 // Map technical skill tag names to Lucide icons dynamically
@@ -66,8 +149,7 @@ const getTagIcon = (tagName) => {
   const name = tagName.toLowerCase();
   if (name.includes('react')) return <Atom size={12} className="tag-icon text-react" style={{ color: '#00d8ff' }} />;
   if (name.includes('laravel')) return <Flame size={12} className="tag-icon text-laravel" style={{ color: '#ff2d20' }} />;
-  if (name.includes('mysql')) return <Database size={12} className="tag-icon text-db" style={{ color: '#336791' }} />;
-  if (name.includes('postgres')) return <Database size={12} className="tag-icon text-db" style={{ color: '#336791' }} />;
+  if (name.includes('mysql') || name.includes('postgres') || name.includes('sqlite')) return <Database size={12} className="tag-icon text-db" style={{ color: '#336791' }} />;
   if (name.includes('api')) return <Globe size={12} className="tag-icon text-api" style={{ color: '#f59e0b' }} />;
   if (name.includes('php')) return <Cpu size={12} className="tag-icon text-php" style={{ color: '#777bb4' }} />;
   if (name.includes('bootstrap') || name.includes('tailwind')) return <Layers size={12} className="tag-icon text-tailwind" style={{ color: '#38bdf8' }} />;
@@ -87,6 +169,8 @@ export const Projects = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50, isTilting: false });
+  const mockupRef = useRef(null);
   
   const totalProjects = projectsData.length;
 
@@ -100,7 +184,55 @@ export const Projects = () => {
     setCurrentIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
   };
 
-  // Keyboard controls for projects carousel
+  // Touch gesture swipe support for mobile and tablets
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+  const sectionRef = useRef(null);
+  const dockContainerRef = useRef(null);
+  const activeDockItemRef = useRef(null);
+
+  // Check if projects section is currently visible in the viewport
+  const isSectionInView = useInView(sectionRef, { amount: 0.15 });
+
+  // Auto-scroll the active dock item ONLY inside its horizontal dock container
+  // (NEVER uses scrollIntoView which causes the browser window to jump down)
+  useEffect(() => {
+    const item = activeDockItemRef.current;
+    const container = dockContainerRef.current;
+    if (item && container) {
+      const itemLeft = item.offsetLeft;
+      const itemWidth = item.offsetWidth;
+      const containerWidth = container.offsetWidth;
+      const targetScrollLeft = itemLeft - (containerWidth / 2) + (itemWidth / 2);
+      container.scrollTo({
+        left: targetScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  }, [currentIndex]);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 45; // 45px swipe threshold
+    if (diff > threshold) {
+      nextSlide();
+    } else if (diff < -threshold) {
+      prevSlide();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       const projectsEl = document.getElementById('projects');
@@ -120,17 +252,16 @@ export const Projects = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex]);
 
-  // Autoplay function
+  // Autoplay functionality: automatically rotates projects one by one every 7.5 seconds
   useEffect(() => {
-    if (isHovering) return;
     const interval = setInterval(() => {
       nextSlide();
     }, 7500);
     return () => clearInterval(interval);
-  }, [isHovering, currentIndex]);
+  }, [currentIndex]);
 
   const activeProject = projectsData[currentIndex];
-  const colors = getProjectColors(activeProject.color);
+  const colors = getProjectColors(activeProject);
 
   // Address formatter helper for Chrome/Safari highlight style
   const formatAddress = (project) => {
@@ -155,217 +286,471 @@ export const Projects = () => {
     return <span className="address-domain">{url}</span>;
   };
 
-  // Animation variants for the entire card to avoid sync lag & layout shifts
-  const cardVariants = shouldReduceMotion
+  // 3D Perspective Tilt on Mouse Move
+  const handleMockupMouseMove = (e) => {
+    if (!mockupRef.current || shouldReduceMotion) return;
+    const rect = mockupRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -7; // range: -7deg to +7deg
+    const rotateY = ((x - centerX) / centerX) * 7;   // range: -7deg to +7deg
+    const glareX = (x / rect.width) * 100;
+    const glareY = (y / rect.height) * 100;
+
+    setTilt({ rotateX, rotateY, glareX, glareY, isTilting: true });
+  };
+
+  const handleMockupMouseLeave = () => {
+    setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50, isTilting: false });
+  };
+
+  // Motion Variants for Staggered Parallax Transition
+  const containerVariants = shouldReduceMotion
     ? {
         enter: { opacity: 0 },
-        center: { opacity: 1, transition: { duration: 0.4 } },
-        exit: { opacity: 0, transition: { duration: 0.3 } }
+        center: { opacity: 1, transition: { duration: 0.3 } },
+        exit: { opacity: 0, transition: { duration: 0.2 } }
       }
     : {
         enter: (dir) => ({
-          x: dir > 0 ? 40 : -40,
           opacity: 0,
+          x: dir > 0 ? 40 : -40,
           scale: 0.99
         }),
         center: {
-          x: 0,
           opacity: 1,
+          x: 0,
           scale: 1,
-          transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+          transition: {
+            duration: 0.85,
+            ease: [0.22, 1, 0.36, 1],
+            staggerChildren: 0.07,
+            delayChildren: 0.05
+          }
         },
         exit: (dir) => ({
-          x: dir < 0 ? 40 : -40,
           opacity: 0,
+          x: dir < 0 ? 40 : -40,
           scale: 0.99,
-          transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+          transition: {
+            duration: 0.45,
+            ease: [0.22, 1, 0.36, 1]
+          }
+        })
+      };
+
+  const childVariants = shouldReduceMotion
+    ? {
+        enter: { opacity: 0 },
+        center: { opacity: 1 },
+        exit: { opacity: 0 }
+      }
+    : {
+        enter: { opacity: 0, y: 14 },
+        center: { 
+          opacity: 1, 
+          y: 0, 
+          transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } 
+        },
+        exit: { opacity: 0, y: -8, transition: { duration: 0.3 } }
+      };
+
+  const mockupVariants = shouldReduceMotion
+    ? {
+        enter: { opacity: 0 },
+        center: { opacity: 1 },
+        exit: { opacity: 0 }
+      }
+    : {
+        enter: (dir) => ({
+          opacity: 0,
+          x: dir > 0 ? 45 : -45,
+          scale: 0.97
+        }),
+        center: {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
+        },
+        exit: (dir) => ({
+          opacity: 0,
+          x: dir < 0 ? 45 : -45,
+          scale: 0.97,
+          transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
         })
       };
 
   return (
-    <section id="projects" className="section">
+    <section id="projects" ref={sectionRef} className="section projects-section-root">
       <div className="container">
+        
+        {/* Section Header */}
         <div className="section-header">
-          <span className="section-subtitle">Portfolio</span>
-          <h2 className="section-title">Featured <span className="title-bold">Projects</span></h2>
+          <span className="section-subtitle">
+            <Sparkles size={13} style={{ display: 'inline-block', verticalAlign: '-1px', marginRight: '5px' }} />
+            Featured Work
+          </span>
+          <h2 className="section-title">
+            Engineering & <span className="title-bold">Production Apps</span>
+          </h2>
         </div>
 
-        {/* Carousel Wrapper with colors applied to parent container */}
+        {/* Carousel Stage Wrapper with Dynamic Ambient Mesh Glow */}
         <div 
           className="projects-carousel-wrapper"
           onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
+          onMouseLeave={() => {
+            setIsHovering(false);
+            handleMockupMouseLeave();
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           style={{
             '--proj-color-primary': colors.primary,
             '--proj-color-secondary': colors.secondary,
-            '--proj-color-glow': colors.glow
+            '--proj-color-glow': colors.glow,
+            '--proj-color-accent': colors.accent
           }}
         >
+          {/* Top Stage Header with Category & Project Counter Badge */}
+          <div className="projects-stage-topbar">
+            <div className="projects-counter-badge">
+              <span className="projects-live-pulse" style={{ backgroundColor: colors.primary }}></span>
+              <span className="projects-counter-current">
+                {String(currentIndex + 1).padStart(2, '0')}
+              </span>
+              <span className="projects-counter-separator">/</span>
+              <span className="projects-counter-total">
+                {String(totalProjects).padStart(2, '0')}
+              </span>
+              <span className="projects-counter-label">{colors.category}</span>
+            </div>
+          </div>
+
+          {/* Main Cinematic Stage Card */}
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={currentIndex}
               custom={direction}
-              variants={cardVariants}
+              variants={containerVariants}
               initial="enter"
               animate="center"
               exit="exit"
               className="projects-carousel-card glass-panel"
             >
-              {/* Inner Ambient Glow layer */}
+              {/* Dynamic Mesh Ambient Glow matched to project screenshot */}
               <div className="projects-card-glow-overlay"></div>
 
               <div className="projects-carousel-grid">
                 
-                {/* Left Side: Staggered details */}
+                {/* Left Column: Staggered Technical Architecture Details */}
                 <div className="projects-carousel-left">
-                  <div className="projects-carousel-badge">
-                    <span className="projects-badge-index">0{currentIndex + 1}</span>
-                    <span className="projects-badge-separator">/</span>
-                    <span className="projects-badge-total">0{totalProjects}</span>
-                    <span className="projects-badge-tagline" style={{ marginLeft: '0.5rem', opacity: 0.6 }}>Featured Work</span>
-                  </div>
+                  
+                  <motion.div variants={childVariants} className="projects-meta-headline">
+                    <div 
+                      className="projects-icon-badge" 
+                      style={{ 
+                        color: colors.primary, 
+                        borderColor: `${colors.primary}44`,
+                        background: `${colors.primary}12`,
+                        boxShadow: `0 0 16px ${colors.glow}`
+                      }}
+                    >
+                      {getProjectIcon(activeProject.icon)}
+                    </div>
+                    <span className="projects-category-text" style={{ color: colors.primary }}>
+                      {colors.category}
+                    </span>
+                  </motion.div>
 
-                  <h3 className="projects-carousel-title">
+                  <motion.h3 variants={childVariants} className="projects-carousel-title">
                     {activeProject.title}
-                  </h3>
+                  </motion.h3>
 
-                  <p className="projects-carousel-desc">
+                  <motion.p variants={childVariants} className="projects-carousel-desc">
                     {activeProject.description}
-                  </p>
+                  </motion.p>
 
-                  {/* Checklist features */}
-                  <ul className="projects-carousel-features">
+                  {/* Core Architecture Highlights Checklist */}
+                  <motion.ul variants={childVariants} className="projects-carousel-features">
                     {activeProject.features && activeProject.features.map((feat, fIdx) => (
                       <li key={fIdx} className="projects-carousel-feature-item">
-                        <Check size={14} className="feature-check-icon" style={{ color: colors.primary }} />
+                        <div 
+                          className="feature-check-bubble" 
+                          style={{ 
+                            backgroundColor: `${colors.primary}18`, 
+                            color: colors.primary,
+                            border: `1px solid ${colors.primary}33`
+                          }}
+                        >
+                          <Check size={12} strokeWidth={2.6} />
+                        </div>
                         <span className="feature-text">{feat}</span>
                       </li>
                     ))}
-                  </ul>
+                  </motion.ul>
 
-                  {/* Tech stack tags */}
-                  <div className="projects-carousel-tags">
+                  {/* Tech Stack Pills */}
+                  <motion.div variants={childVariants} className="projects-carousel-tags">
                     {activeProject.tags.map((tag, tIdx) => (
                       <Badge key={tIdx} className="projects-carousel-tag">
                         {getTagIcon(tag)}
                         <span>{tag}</span>
                       </Badge>
                     ))}
-                  </div>
+                  </motion.div>
 
-                  {/* Action link buttons */}
-                  <div className="projects-carousel-buttons">
-                    {activeProject.githubLink && (
-                      <Magnetic>
-                        <a 
-                          href={activeProject.githubLink} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="btn btn-secondary project-btn-github"
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
-                        >
-                          <GithubIcon size={16} /> Code Repository
-                        </a>
-                      </Magnetic>
-                    )}
-                    {activeProject.demoLink && activeProject.demoLink !== "#" && (
-                      <Magnetic>
+                  {/* Primary & Secondary Call to Actions */}
+                  <motion.div variants={childVariants} className="projects-carousel-buttons">
+                    {activeProject.demoLink && activeProject.demoLink !== "#" ? (
+                      <Magnetic range={15}>
                         <a 
                           href={activeProject.demoLink} 
                           target="_blank" 
                           rel="noopener noreferrer" 
                           className="btn btn-primary project-btn-demo"
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                          style={{
+                            background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+                            borderColor: colors.primary,
+                            boxShadow: `0 8px 24px ${colors.glow}`
+                          }}
                         >
-                          <ExternalLink size={16} /> Live Demo
+                          <ExternalLink size={15} /> Live Demo
                         </a>
                       </Magnetic>
-                    )}
-                  </div>
+                    ) : null}
+
+                    {activeProject.githubLink ? (
+                      <Magnetic range={15}>
+                        <a 
+                          href={activeProject.githubLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="btn btn-secondary project-btn-github"
+                        >
+                          <GithubIcon size={16} /> Source Code
+                        </a>
+                      </Magnetic>
+                    ) : null}
+                  </motion.div>
+
                 </div>
 
-                {/* Right Side: Mockup Browser Frame */}
-                <div className="projects-carousel-right">
-                  <div className="projects-browser-mockup">
-                    <div className="browser-topbar">
-                      <div className="browser-dots">
-                        <span className="browser-dot red"></span>
-                        <span className="browser-dot yellow"></span>
-                        <span className="browser-dot green"></span>
+                {/* Right Column: 3D Perspective Browser Frame */}
+                <motion.div 
+                  variants={mockupVariants} 
+                  custom={direction}
+                  className="projects-carousel-right"
+                >
+                  <div 
+                    ref={mockupRef}
+                    className="projects-mockup-perspective"
+                    onMouseMove={handleMockupMouseMove}
+                    onMouseLeave={handleMockupMouseLeave}
+                  >
+                    <div 
+                      className="projects-browser-mockup"
+                      style={{
+                        transform: shouldReduceMotion 
+                          ? 'none' 
+                          : `perspective(1200px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${tilt.isTilting ? 1.02 : 1})`,
+                        transition: tilt.isTilting 
+                          ? 'transform 0.1s ease-out' 
+                          : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease',
+                        borderColor: tilt.isTilting ? `${colors.primary}66` : undefined,
+                        boxShadow: `0 24px 60px rgba(0, 0, 0, 0.5), 0 0 30px ${colors.glow}`
+                      }}
+                    >
+                      {/* macOS Browser Chrome Bar */}
+                      <div className="browser-topbar">
+                        <div className="browser-dots">
+                          <span className="browser-dot red" title="Close">
+                            <span className="dot-glyph">✕</span>
+                          </span>
+                          <span className="browser-dot yellow" title="Minimize">
+                            <span className="dot-glyph">−</span>
+                          </span>
+                          <span className="browser-dot green" title="Expand">
+                            <span className="dot-glyph">+</span>
+                          </span>
+                        </div>
+                        
+                        <div 
+                          className="browser-address"
+                          onClick={() => {
+                            if (activeProject.demoLink && activeProject.demoLink !== "#") {
+                              window.open(activeProject.demoLink, '_blank');
+                            }
+                          }}
+                          style={{ cursor: activeProject.demoLink && activeProject.demoLink !== "#" ? 'pointer' : 'default' }}
+                          title={activeProject.demoLink && activeProject.demoLink !== "#" ? "Click to visit live site" : undefined}
+                        >
+                          <Lock size={11} className="browser-lock-icon" style={{ color: colors.primary }} />
+                          {formatAddress(activeProject)}
+                          <RotateCw size={11} className="browser-reload-icon" />
+                        </div>
                       </div>
-                      <div className="browser-address">
-                        <Lock size={12} className="browser-lock-icon" />
-                        {formatAddress(activeProject)}
-                        <RotateCw size={11} className="browser-reload-icon" />
+                      
+                      {/* Viewport Screen with Glass Sheen Layer */}
+                      <div className="browser-screen">
+                        <img 
+                          src={activeProject.image} 
+                          alt={activeProject.title} 
+                          className="browser-screen-img"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop";
+                          }}
+                        />
+
+                        {/* Interactive dynamic cursor sheen glare */}
+                        <div 
+                          className="browser-glare-sheen"
+                          style={{
+                            background: `radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.2) 0%, transparent 60%)`,
+                            opacity: tilt.isTilting ? 1 : 0
+                          }}
+                        />
+
+                        {/* Direct hover quick action pill */}
+                        {activeProject.demoLink && activeProject.demoLink !== "#" && (
+                          <a
+                            href={activeProject.demoLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="browser-quick-action-pill"
+                            style={{
+                              background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+                              boxShadow: `0 6px 20px ${colors.glow}`
+                            }}
+                          >
+                            <span>Preview Live</span>
+                            <ArrowUpRight size={13} />
+                          </a>
+                        )}
                       </div>
-                    </div>
-                    
-                    <div className="browser-screen">
-                      <img 
-                        src={activeProject.image} 
-                        alt={activeProject.title} 
-                        className="browser-screen-img"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop";
-                        }}
-                      />
+
+                      {/* Mockup Status Footer Bar */}
+                      <div className="browser-footer-status">
+                        <div className="status-item">
+                          <Activity size={11} style={{ color: colors.primary }} />
+                          <span>Production Build</span>
+                        </div>
+                        <div className="status-item-separator">•</div>
+                        <div className="status-item">
+                          <ShieldCheck size={11} style={{ color: colors.primary }} />
+                          <span>Tested & Scalable</span>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
               </div>
             </motion.div>
           </AnimatePresence>
 
-          {/* Carousel navigation controls */}
-          <div className="projects-carousel-controls">
-            <div className="projects-carousel-dots">
-              {projectsData.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setDirection(idx > currentIndex ? 1 : -1);
-                    setCurrentIndex(idx);
-                  }}
-                  className={`projects-carousel-dot ${idx === currentIndex ? 'active' : ''}`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              ))}
-            </div>
+          {/* Autoplay Progress Line Indicator */}
+          <div className="projects-autoplay-track">
+            <motion.div 
+              key={currentIndex}
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 7.5, ease: 'linear' }}
+              className="projects-autoplay-bar"
+              style={{
+                background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
+                boxShadow: `0 0 10px ${colors.glow}`
+              }}
+            />
+          </div>
 
-            {/* Autoplay progress bar */}
-            <div className="projects-carousel-progress-container">
-              <motion.div 
-                key={currentIndex + (isHovering ? '-paused' : '-playing')}
-                initial={{ width: '0%' }}
-                animate={{ width: isHovering ? '0%' : '100%' }}
-                transition={{ duration: isHovering ? 0 : 7.5, ease: 'linear' }}
-                className="projects-carousel-progress-bar"
-              />
-            </div>
+          {/* macOS Dock-Style Thumbnail Strip (Stripe & Vercel Style) */}
+          <div className="macos-dock-wrapper">
+            <div ref={dockContainerRef} className="macos-dock-glass">
+              {projectsData.map((project, idx) => {
+                const isActive = idx === currentIndex;
+                const projColors = getProjectColors(project);
+                
+                return (
+                  <button
+                    key={project.id}
+                    ref={isActive ? activeDockItemRef : null}
+                    className={`macos-dock-item ${isActive ? 'active' : ''}`}
+                    onClick={() => {
+                      setDirection(idx > currentIndex ? 1 : -1);
+                      setCurrentIndex(idx);
+                    }}
+                    aria-label={`Switch to ${project.title}`}
+                  >
+                    {/* Animated Sliding Pill Indicator */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeDockPill"
+                        className="macos-dock-active-pill"
+                        style={{
+                          borderColor: projColors.primary,
+                          boxShadow: `0 0 18px ${projColors.glow}, inset 0 0 10px ${projColors.glow}`
+                        }}
+                        transition={{ type: 'spring', stiffness: 440, damping: 32 }}
+                      />
+                    )}
 
-            <div className="projects-carousel-arrows">
-              <Magnetic range={30}>
-                <button 
-                  onClick={prevSlide}
-                  className="projects-carousel-arrow-btn"
-                  aria-label="Previous project"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-              </Magnetic>
-              <Magnetic range={30}>
-                <button 
-                  onClick={nextSlide}
-                  className="projects-carousel-arrow-btn"
-                  aria-label="Next project"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </Magnetic>
+                    {/* Miniature Project Thumbnail Container */}
+                    <div 
+                      className="macos-dock-thumb-container"
+                      style={{
+                        borderColor: isActive ? projColors.primary : undefined,
+                        boxShadow: isActive ? `0 0 14px ${projColors.glow}` : undefined
+                      }}
+                    >
+                      <img 
+                        src={project.image} 
+                        alt={project.title} 
+                        className="macos-dock-thumb-img" 
+                      />
+                      <div className="macos-dock-thumb-overlay" />
+                      
+                      {/* Mini Icon Badge in corner */}
+                      <div 
+                        className="macos-dock-icon-tag"
+                        style={{
+                          backgroundColor: isActive ? projColors.primary : 'rgba(0, 0, 0, 0.7)',
+                          color: isActive ? '#fff' : projColors.accent
+                        }}
+                      >
+                        {getProjectIcon(project.icon)}
+                      </div>
+                    </div>
+
+                    {/* Hover Magnification Tooltip */}
+                    <div className="macos-dock-tooltip">
+                      <span className="dock-tooltip-title">{project.title}</span>
+                      <span className="dock-tooltip-tag" style={{ color: projColors.primary }}>
+                        {project.tags[0]}
+                      </span>
+                    </div>
+
+                    {/* Active Underline Dot */}
+                    <div 
+                      className={`macos-dock-dot ${isActive ? 'active' : ''}`} 
+                      style={{ 
+                        backgroundColor: isActive ? projColors.primary : undefined,
+                        boxShadow: isActive ? `0 0 8px ${projColors.primary}` : undefined
+                      }} 
+                    />
+                  </button>
+                );
+              })}
             </div>
           </div>
+
         </div>
 
       </div>
