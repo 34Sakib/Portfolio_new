@@ -1,48 +1,23 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   X, 
   ZoomIn, 
   Copy, 
   Check, 
-  Award, 
   Sparkles, 
   ExternalLink, 
   ShieldCheck, 
   Calendar,
-  CheckCircle2,
   BadgeCheck,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
 import { certificatesData } from '../../data/certificates';
 
-// 3D Holographic Glass Plaque Card Component
+// Fixed Holographic Glass Plaque Card Component (Stationary - no tilt/shift on touch or hover)
 const HolographicCertCard = ({ cert, onOpenLightbox, onCopyId, isCopied }) => {
-  const cardRef = useRef(null);
-  const shouldReduceMotion = useReducedMotion();
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50, isHovered: false });
-
-  const handleMouseMove = (e) => {
-    if (!cardRef.current || shouldReduceMotion) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = ((y - centerY) / centerY) * -7; // -7deg to +7deg
-    const rotateY = ((x - centerX) / centerX) * 7;   // -7deg to +7deg
-    const glareX = (x / rect.width) * 100;
-    const glareY = (y / rect.height) * 100;
-
-    setTilt({ rotateX, rotateY, glareX, glareY, isHovered: true });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50, isHovered: false });
-  };
+  const [isHovered, setIsHovered] = useState(false);
 
   const truncateId = (id) => {
     if (!id) return '';
@@ -53,21 +28,15 @@ const HolographicCertCard = ({ cert, onOpenLightbox, onCopyId, isCopied }) => {
   return (
     <div className="holographic-cert-perspective">
       <div
-        ref={cardRef}
-        className={`holographic-cert-card ${tilt.isHovered ? 'hovered' : ''}`}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        className={`holographic-cert-card ${isHovered ? 'hovered' : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{
           '--cert-brand-color': cert.brandColor,
           '--cert-brand-glow': cert.brandGlow,
-          '--glare-x': `${tilt.glareX}%`,
-          '--glare-y': `${tilt.glareY}%`,
-          transform: shouldReduceMotion
-            ? 'none'
-            : `perspective(1100px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${tilt.isHovered ? -6 : 0}px)`,
-          borderColor: tilt.isHovered ? `${cert.brandColor}66` : undefined,
-          boxShadow: tilt.isHovered 
-            ? `0 24px 50px rgba(0, 0, 0, 0.45), 0 0 25px ${cert.brandGlow}`
+          borderColor: isHovered ? `${cert.brandColor}66` : undefined,
+          boxShadow: isHovered 
+            ? `0 20px 45px rgba(0, 0, 0, 0.45), 0 0 25px ${cert.brandGlow}`
             : undefined
         }}
       >

@@ -1,6 +1,5 @@
 import React from 'react';
 import { 
-  Calendar, 
   CheckCircle2, 
   Atom, 
   Layers, 
@@ -17,6 +16,7 @@ import {
 } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { experienceData } from '../../data/experience';
+import codexlabbdLogo from '../../assets/codexlabbd.png';
 import Badge from '../ui/Badge';
 
 // Map technical skill tag names to Lucide icons dynamically
@@ -93,6 +93,10 @@ export const Experience = () => {
           <div className="browser-content">
             <div className="experience-tree">
               {experienceData.map((exp, idx) => {
+                const logoSrc = exp.company?.toLowerCase().includes('codexlab bd') 
+                  ? (codexlabbdLogo || exp.logo || '/codexlabbd.png')
+                  : exp.logo;
+
                 return (
                   <motion.div 
                     key={idx} 
@@ -102,21 +106,28 @@ export const Experience = () => {
                     {/* Company Header: Logo + Name */}
                     <div className="company-info-row">
                       <div className="company-logo-circle">
-                        {exp.logo ? (
+                        {logoSrc ? (
                           <img 
-                            src={exp.logo} 
+                            src={logoSrc} 
                             alt={`${exp.company} Logo`} 
                             className="company-logo-img"
                             referrerPolicy="no-referrer"
                             onError={(e) => {
+                              if (!e.target.dataset.triedPublic && exp.company?.toLowerCase().includes('codexlab')) {
+                                e.target.dataset.triedPublic = 'true';
+                                e.target.src = '/codexlabbd.png';
+                                return;
+                              }
                               e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
+                              if (e.target.nextSibling) {
+                                e.target.nextSibling.style.display = 'flex';
+                              }
                             }}
                           />
                         ) : null}
                         <div 
                           className="company-logo-placeholder" 
-                          style={{ display: exp.logo ? 'none' : 'flex' }}
+                          style={{ display: logoSrc ? 'none' : 'flex' }}
                         >
                           {exp.company.substring(0, 1)}
                         </div>

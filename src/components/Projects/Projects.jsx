@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   ShoppingCart, 
   Laptop, 
@@ -8,6 +8,7 @@ import {
   GraduationCap, 
   Building2,
   ShoppingBag,
+  BookOpen,
   ExternalLink,
   Check,
   Atom, 
@@ -24,7 +25,9 @@ import {
   Sparkles,
   ArrowUpRight,
   ShieldCheck,
-  Activity
+  Activity,
+  Play,
+  Pause
 } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion, useInView } from 'framer-motion';
 import { projectsData } from '../../data/projects';
@@ -51,6 +54,13 @@ const GithubIcon = ({ size = 18, ...props }) => (
 
 // High-fidelity color palettes precisely extracted from the actual project screenshot images
 const projectColorPalette = {
+  13: { // READWISE -> Warm Amber Gold & Midnight Navy
+    primary: '#F59E0B',
+    secondary: '#D97706',
+    glow: 'rgba(245, 158, 11, 0.28)',
+    accent: '#FDE68A',
+    category: 'EdTech & E-Learning Platform'
+  },
   9: { // Mentors' Global -> Crimson / Scarlet Red
     primary: '#E11D48',
     secondary: '#BE123C',
@@ -132,6 +142,7 @@ const getProjectColors = (project) => {
 // Map project icons dynamically
 const getProjectIcon = (iconName) => {
   switch (iconName) {
+    case 'BookOpen': return <BookOpen size={15} />;
     case 'GraduationCap': return <GraduationCap size={15} />;
     case 'Building2': return <Building2 size={15} />;
     case 'ShoppingBag': return <ShoppingBag size={15} />;
@@ -160,7 +171,7 @@ const getTagIcon = (tagName) => {
   if (name.includes('javascript') || name.includes('jquery')) return <Code size={12} className="tag-icon text-js" style={{ color: '#f7df1e' }} />;
   if (name.includes('nestjs')) return <Server size={12} className="tag-icon text-node" style={{ color: '#e0234e' }} />;
   if (name.includes('typeorm')) return <Terminal size={12} className="tag-icon text-vite" style={{ color: '#f59e0b' }} />;
-  if (name.includes('blade')) return <Layers size={12} className="tag-icon text-html" style={{ color: '#f0533c' }} />;
+  if (name.includes('blade') || name.includes('datatables')) return <Layers size={12} className="tag-icon text-html" style={{ color: '#f0533c' }} />;
   return <Terminal size={12} className="tag-icon" />;
 };
 
@@ -169,20 +180,21 @@ export const Projects = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50, isTilting: false });
+  const [isTouchPaused, setIsTouchPaused] = useState(false);
   const mockupRef = useRef(null);
   
   const totalProjects = projectsData.length;
+  const isPaused = isHovering || isTouchPaused;
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % totalProjects);
-  };
+  }, [totalProjects]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
-  };
+  }, [totalProjects]);
 
   // Touch gesture swipe support for mobile and tablets
   const touchStartX = useRef(null);
@@ -213,6 +225,8 @@ export const Projects = () => {
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
+    // Pause autoplay immediately on touch so user can examine card details
+    setIsTouchPaused(true);
   };
 
   const handleTouchMove = (e) => {
@@ -225,8 +239,10 @@ export const Projects = () => {
     const threshold = 45; // 45px swipe threshold
     if (diff > threshold) {
       nextSlide();
+      setIsTouchPaused(false);
     } else if (diff < -threshold) {
       prevSlide();
+      setIsTouchPaused(false);
     }
     touchStartX.current = null;
     touchEndX.current = null;
@@ -250,15 +266,18 @@ export const Projects = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex]);
+  }, [currentIndex, nextSlide, prevSlide]);
 
   // Autoplay functionality: automatically rotates projects one by one every 7.5 seconds
+  // Pauses when user hovers cursor or touches any project card, or when section is not in view
   useEffect(() => {
+    if (isPaused || !isSectionInView) return;
+
     const interval = setInterval(() => {
       nextSlide();
     }, 7500);
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, isPaused, isSectionInView, nextSlide]);
 
   const activeProject = projectsData[currentIndex];
   const colors = getProjectColors(activeProject);
@@ -284,27 +303,6 @@ export const Projects = () => {
       );
     }
     return <span className="address-domain">{url}</span>;
-  };
-
-  // 3D Perspective Tilt on Mouse Move
-  const handleMockupMouseMove = (e) => {
-    if (!mockupRef.current || shouldReduceMotion) return;
-    const rect = mockupRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = ((y - centerY) / centerY) * -7; // range: -7deg to +7deg
-    const rotateY = ((x - centerX) / centerX) * 7;   // range: -7deg to +7deg
-    const glareX = (x / rect.width) * 100;
-    const glareY = (y / rect.height) * 100;
-
-    setTilt({ rotateX, rotateY, glareX, glareY, isTilting: true });
-  };
-
-  const handleMockupMouseLeave = () => {
-    setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50, isTilting: false });
   };
 
   // Motion Variants for Staggered Parallax Transition
@@ -403,10 +401,7 @@ export const Projects = () => {
         <div 
           className="projects-carousel-wrapper"
           onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => {
-            setIsHovering(false);
-            handleMockupMouseLeave();
-          }}
+          onMouseLeave={() => setIsHovering(false)}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -420,7 +415,13 @@ export const Projects = () => {
           {/* Top Stage Header with Category & Project Counter Badge */}
           <div className="projects-stage-topbar">
             <div className="projects-counter-badge">
-              <span className="projects-live-pulse" style={{ backgroundColor: colors.primary }}></span>
+              <span 
+                className={`projects-live-pulse ${isPaused ? 'paused' : ''}`} 
+                style={{ 
+                  backgroundColor: isPaused ? '#f59e0b' : colors.primary,
+                  boxShadow: isPaused ? '0 0 6px rgba(245, 158, 11, 0.5)' : `0 0 10px ${colors.primary}`
+                }}
+              />
               <span className="projects-counter-current">
                 {String(currentIndex + 1).padStart(2, '0')}
               </span>
@@ -429,6 +430,24 @@ export const Projects = () => {
                 {String(totalProjects).padStart(2, '0')}
               </span>
               <span className="projects-counter-label">{colors.category}</span>
+
+              {/* Status pill: indicates pause on cursor/touch and allows toggling */}
+              <button
+                type="button"
+                className={`projects-pause-pill ${isPaused ? 'paused' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsTouchPaused(!isPaused);
+                  if (isPaused) {
+                    setIsHovering(false);
+                  }
+                }}
+                title={isPaused ? "Autoplay paused (Click to resume)" : "Autoplay running (Hover or tap to pause)"}
+                aria-label={isPaused ? "Resume autoplay" : "Pause autoplay"}
+              >
+                {isPaused ? <Play size={10} /> : <Pause size={10} />}
+                <span>{isPaused ? 'Paused' : 'Auto'}</span>
+              </button>
             </div>
           </div>
 
@@ -541,7 +560,7 @@ export const Projects = () => {
 
                 </div>
 
-                {/* Right Column: 3D Perspective Browser Frame */}
+                {/* Right Column: Stationary Fixed Browser Frame */}
                 <motion.div 
                   variants={mockupVariants} 
                   custom={direction}
@@ -550,19 +569,13 @@ export const Projects = () => {
                   <div 
                     ref={mockupRef}
                     className="projects-mockup-perspective"
-                    onMouseMove={handleMockupMouseMove}
-                    onMouseLeave={handleMockupMouseLeave}
                   >
                     <div 
                       className="projects-browser-mockup"
                       style={{
-                        transform: shouldReduceMotion 
-                          ? 'none' 
-                          : `perspective(1200px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${tilt.isTilting ? 1.02 : 1})`,
-                        transition: tilt.isTilting 
-                          ? 'transform 0.1s ease-out' 
-                          : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease',
-                        borderColor: tilt.isTilting ? `${colors.primary}66` : undefined,
+                        transform: 'none',
+                        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                        borderColor: isHovering ? `${colors.primary}66` : undefined,
                         boxShadow: `0 24px 60px rgba(0, 0, 0, 0.5), 0 0 30px ${colors.glow}`
                       }}
                     >
@@ -608,12 +621,12 @@ export const Projects = () => {
                           }}
                         />
 
-                        {/* Interactive dynamic cursor sheen glare */}
+                        {/* Subtle static ambient glass sheen */}
                         <div 
                           className="browser-glare-sheen"
                           style={{
-                            background: `radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.2) 0%, transparent 60%)`,
-                            opacity: tilt.isTilting ? 1 : 0
+                            background: 'radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 70%)',
+                            opacity: isHovering ? 0.7 : 0.3
                           }}
                         />
 
@@ -659,14 +672,17 @@ export const Projects = () => {
           {/* Autoplay Progress Line Indicator */}
           <div className="projects-autoplay-track">
             <motion.div 
-              key={currentIndex}
-              initial={{ width: '0%' }}
+              key={`${currentIndex}-${isPaused}`}
+              initial={{ width: isPaused ? '100%' : '0%' }}
               animate={{ width: '100%' }}
-              transition={{ duration: 7.5, ease: 'linear' }}
+              transition={{ duration: isPaused ? 0 : 7.5, ease: 'linear' }}
               className="projects-autoplay-bar"
               style={{
-                background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
-                boxShadow: `0 0 10px ${colors.glow}`
+                background: isPaused
+                  ? 'rgba(255, 255, 255, 0.25)'
+                  : `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
+                boxShadow: isPaused ? 'none' : `0 0 10px ${colors.glow}`,
+                opacity: isPaused ? 0.45 : 1
               }}
             />
           </div>
@@ -686,6 +702,7 @@ export const Projects = () => {
                     onClick={() => {
                       setDirection(idx > currentIndex ? 1 : -1);
                       setCurrentIndex(idx);
+                      setIsTouchPaused(false);
                     }}
                     aria-label={`Switch to ${project.title}`}
                   >

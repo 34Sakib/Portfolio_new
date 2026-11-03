@@ -1,3 +1,5 @@
+import codexlabbd from '../assets/codexlabbd.png';
+
 export const experienceData = [
   {
     period: "June 2026 – Present",
@@ -26,7 +28,7 @@ export const experienceData = [
     duration: "11 mos",
     role: "Junior Software Developer",
     company: "Codexlab BD",
-    logo: "https://codexlabbd.com/codexlab-logo.png",
+    logo: codexlabbd,
     location: "Dhaka, Bangladesh",
     type: "Full-Time",
     description: "Engineered responsive, mobile-first web applications using Laravel, Blade, and Bootstrap. Designed relational databases and optimized schema queries via Eloquent ORM.",

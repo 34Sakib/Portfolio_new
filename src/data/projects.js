@@ -1,3 +1,4 @@
+import readwise from '../assets/readwise.png';
 import codexlabasia from '../assets/codexlabasia.png';
 import kino from '../assets/kino.png';
 import nuvara from '../assets/Nuvara.png';
@@ -10,6 +11,23 @@ import hospitalManagement from '../assets/hospital_management.png';
 import onlineLearning from '../assets/online_learning.png';
 
 const rawProjectsData = [
+  {
+    id: 13,
+    title: "READWISE - Mentors' Vocabulary & Interactive Reader Suite",
+    description: "Full-stack vocabulary learning and reading comprehension platform with interactive word lookups and real-time progress analytics.",
+    features: [
+      "Designed and implemented an interactive in-text vocabulary engine with instant word definitions, parts-of-speech tagging, and word favoriting.",
+      "Built a responsive student dashboard featuring adaptive reading history, Daily 20 practice modules, and visual reading activity metrics.",
+      "Implemented multi-guard authentication and role-based access control (RBAC) for students, instructors, and administrators.",
+      "Integrated batch & course enrollment pipelines, dynamic article management, Yajra DataTables, and automated daily activity audit logging."
+    ],
+    image: readwise,
+    tags: ["Laravel 12", "PHP 8.2", "MySQL", "Tailwind CSS", "JavaScript", "Vite", "REST API", "Blade", "DataTables"],
+    demoLink: "https://readwise.org/",
+    icon: "BookOpen",
+    color: "from-amber-500 to-yellow-600",
+    bgColor: "bg-amber-50"
+  },
   {
     id: 9,
     title: "Mentors' Global",
@@ -191,17 +209,33 @@ const rawProjectsData = [
   }
 ];
 
-// Helper to ensure Mentors' Global is ALWAYS pinned as the first project (index 0)
-const ensureMentorsGlobalFirst = (projects) => {
-  const mentorsIndex = projects.findIndex(
+// Helper to ensure READWISE is pinned as #1 and Mentors' Global as #2
+const orderFeaturedProjects = (projects) => {
+  const copy = [...projects];
+  
+  // Extract READWISE if present
+  const readwiseIndex = copy.findIndex(
+    (p) => p.id === 13 || (p.title && p.title.toLowerCase().includes('readwise'))
+  );
+  let readwiseItem = null;
+  if (readwiseIndex !== -1) {
+    [readwiseItem] = copy.splice(readwiseIndex, 1);
+  }
+
+  // Extract Mentors' Global if present
+  const mentorsIndex = copy.findIndex(
     (p) => p.id === 9 || (p.title && p.title.toLowerCase().includes('mentors'))
   );
-  if (mentorsIndex > 0) {
-    const copy = [...projects];
-    const [mentorsItem] = copy.splice(mentorsIndex, 1);
-    return [mentorsItem, ...copy];
+  let mentorsItem = null;
+  if (mentorsIndex !== -1) {
+    [mentorsItem] = copy.splice(mentorsIndex, 1);
   }
-  return projects;
+
+  const result = [];
+  if (readwiseItem) result.push(readwiseItem);
+  if (mentorsItem) result.push(mentorsItem);
+  result.push(...copy);
+  return result;
 };
 
-export const projectsData = ensureMentorsGlobalFirst(rawProjectsData);
+export const projectsData = orderFeaturedProjects(rawProjectsData);

@@ -2223,6 +2223,58 @@ a {
   padding-left: 0.75rem;
 }
 
+.projects-pause-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  margin-left: 0.55rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  line-height: 1;
+}
+
+.projects-pause-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.projects-pause-pill.paused {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+}
+
+.projects-live-pulse.paused {
+  animation: none;
+  opacity: 0.8;
+}
+
+[data-theme="light"] .projects-pause-pill {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .projects-pause-pill:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .projects-pause-pill.paused {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.25);
+  color: #b45309;
+}
+
 /* Cinematic Main Card */
 .projects-carousel-card {
   width: 100%;
@@ -2441,6 +2493,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.12);
   overflow: hidden;
   position: relative;
+  transform: none !important;
 }
 
 [data-theme="light"] .projects-browser-mockup {
@@ -2573,8 +2626,9 @@ a {
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.projects-browser-mockup .browser-screen-img,
 .projects-browser-mockup:hover .browser-screen-img {
-  transform: scale(1.025);
+  transform: none !important;
 }
 
 .browser-glare-sheen {
@@ -3995,9 +4049,8 @@ a {
     0 16px 40px rgba(0, 0, 0, 0.38),
     inset 0 1px 1px rgba(255, 255, 255, 0.12);
   overflow: hidden;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
-  transform-style: preserve-3d;
-  will-change: transform;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  transform: none !important;
 }
 
 [data-theme="light"] .holographic-cert-card {
