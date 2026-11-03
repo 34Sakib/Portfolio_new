@@ -214,7 +214,9 @@ export const Certificates = () => {
   }, [activeLightboxCert, handlePrevCert, handleNextCert]);
 
   return (
-    <section id="certificates" className="section reveal">
+    <section id="credentials" className="section credentials-section">
+      {/* Anchor shim for backwards compatibility with #certificates */}
+      <span id="certificates" className="section-anchor-shim" aria-hidden="true" />
       {/* Ambient Lighting Backdrop */}
       <div className="cert-ambient-backdrop" aria-hidden="true" />
       
