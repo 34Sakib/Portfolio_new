@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Award, Briefcase, Zap, FileText, Atom, Code2, Database, Terminal, Network, Server } from 'lucide-react';
+import { Award, Briefcase, Zap, FileText } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Magnetic from '../ui/Magnetic';
 
@@ -101,7 +101,7 @@ export const About = () => {
         </motion.div>
 
         <div className="about-grid">
-          {/* Left Column: Tech Stack & Signature Quote */}
+          {/* Left Column: Signature Quote & Milestones */}
           <div className="about-left-col">
             {/* Signature Quote Card */}
             <motion.div className="about-quote-card" variants={itemVariants}>
@@ -111,33 +111,50 @@ export const About = () => {
               </p>
             </motion.div>
 
-            {/* Core Tech Stack grid */}
-            <motion.div className="about-tech-stack" variants={itemVariants}>
-              <h4 className="tech-stack-title">Core Stack</h4>
-              <div className="about-tech-grid">
-                <div className="tech-badge laravel">
-                  <Server size={14} /> Laravel
+            {/* Executive Milestones Card (Fitting neatly in place of Core Stack) */}
+            <motion.div className="about-stats-card" variants={itemVariants}>
+              {/* Stat 1: 1.5+ Years */}
+              <div className="about-stat-item stat-item-experience">
+                <div className="about-stat-header">
+                  <div className="about-stat-icon primary">
+                    <Briefcase size={15} />
+                  </div>
+                  <span className="about-stat-number">
+                    <Counter value={1.5} suffix="+" />
+                  </span>
                 </div>
-                <div className="tech-badge react">
-                  <Atom size={14} /> React.js
+                <span className="about-stat-label">Years of professional code</span>
+              </div>
+
+              {/* Stat 2: 7+ Projects */}
+              <div className="about-stat-item stat-item-projects">
+                <div className="about-stat-header">
+                  <div className="about-stat-icon cyan">
+                    <Zap size={15} />
+                  </div>
+                  <span className="about-stat-number">
+                    <Counter value={10} suffix="+" />
+                  </span>
                 </div>
-                <div className="tech-badge php">
-                  <Code2 size={14} /> PHP
+                <span className="about-stat-label">Core Projects</span>
+              </div>
+
+              {/* Stat 3: 9 Certs */}
+              <div className="about-stat-item stat-item-certs">
+                <div className="about-stat-header">
+                  <div className="about-stat-icon orange">
+                    <Award size={15} />
+                  </div>
+                  <span className="about-stat-number">
+                    <Counter value={9} />
+                  </span>
                 </div>
-                <div className="tech-badge mysql">
-                  <Database size={14} /> MySQL
-                </div>
-                <div className="tech-badge javascript">
-                  <Terminal size={14} /> JavaScript
-                </div>
-                <div className="tech-badge apis">
-                  <Network size={14} /> REST APIs
-                </div>
+                <span className="about-stat-label">Certifications</span>
               </div>
             </motion.div>
           </div>
 
-          {/* Right Column: Bio, Actions, and Stat Band */}
+          {/* Right Column: Bio & Actions */}
           <div className="about-right-col">
             <motion.h3 className="about-headline" variants={itemVariants}>
               Full Stack Developer specializing in Laravel & React.js
@@ -163,44 +180,6 @@ export const About = () => {
                   <FileText size={16} /> View My CV
                 </a>
               </Magnetic>
-            </motion.div>
-
-            {/* Horizontal Stats Band */}
-            <motion.div className="about-stat-band" variants={itemVariants}>
-              {/* Dominant Stat */}
-              <div className="stat-dominant">
-                <div className="stat-number">
-                  <Counter value={1.5} suffix="+" />
-                </div>
-                <div className="stat-label">Years of professional code</div>
-              </div>
-
-              {/* Secondary Stats */}
-              <div className="stat-secondary-group">
-                <div className="stat-item">
-                  <div className="stat-icon-wrapper cyan">
-                    <Zap size={16} />
-                  </div>
-                  <div>
-                    <div className="stat-val">
-                      <Counter value={7} suffix="+" />
-                    </div>
-                    <div className="stat-lbl">Core Projects</div>
-                  </div>
-                </div>
-
-                <div className="stat-item">
-                  <div className="stat-icon-wrapper orange">
-                    <Award size={16} />
-                  </div>
-                  <div>
-                    <div className="stat-val">
-                      <Counter value={9} />
-                    </div>
-                    <div className="stat-lbl">Certifications</div>
-                  </div>
-                </div>
-              </div>
             </motion.div>
           </div>
         </div>

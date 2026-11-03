@@ -16,11 +16,18 @@ const NAV_ITEMS = [
   { label: 'Contact', href: '#contact' }
 ];
 
-export const Navbar = () => {
+export const Navbar = ({ currentRoute = '/', onNavigateHome }) => {
   const [activeSection, setActiveSection] = useState('home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+
+  // Highlight 'projects' when on /projects route
+  useEffect(() => {
+    if (currentRoute === '/projects') {
+      setActiveSection('projects');
+    }
+  }, [currentRoute]);
 
   // Monitor scroll for glass navbar backdrop visibility
   useEffect(() => {
@@ -88,10 +95,24 @@ export const Navbar = () => {
   const handleNavClick = (e, href) => {
     e.preventDefault();
     const id = href.replace('#', '');
+    setIsMobileMenuOpen(false);
+
+    if (currentRoute === '/projects') {
+      if (onNavigateHome) {
+        onNavigateHome(id);
+      } else {
+        window.history.pushState({}, '', '/');
+        window.dispatchEvent(new PopStateEvent('popstate'));
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 60);
+      }
+      return;
+    }
+
     const el = document.getElementById(id);
     if (el) {
-      setIsMobileMenuOpen(false);
-      
       const elementPosition = el.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY;
 

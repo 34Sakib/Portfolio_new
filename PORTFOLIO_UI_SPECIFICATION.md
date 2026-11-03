@@ -121,13 +121,19 @@ Each featured project projects a custom ambient glow and accent set based on its
 
 ---
 
-### 3.3 About Section (Developer Philosophy & Pillars)
-- **Layout**: Asymmetric 2-column grid.
-  - **Left**: High-fidelity developer portrait encased in an organic squircle mask with dual border glow and ambient light halo.
-  - **Right**: Architectural bio narrative detailing enterprise engineering principles, clean code advocacy, and end-to-end full-stack lifecycle mastery.
-- **Key Metric Stat Cards (3-Card Horizontal Grid)**:
-  - Frosted glass cards featuring large mono counters (`+4 Years`, `+15 Deployed Systems`, `99.9% Uptime Focus`).
-  - Subtitles explaining production experience, microservice delivery, and database query optimization.
+### 3.3 About Section (Introduction & Milestones)
+- **Layout**: Balanced 2-column grid (`1fr : 1.25fr`).
+  - **Left Column**:
+    - **Signature Quote Card**: Large italicized serif typography with warm accent quotation mark (*“Good code speaks for itself, great code disappears into the experience.”*).
+    - **Executive Milestones Suite** (in place of redundant Core Stack pills, which are comprehensively detailed in My Skillset):
+      - **Flagship Experience Card**: Prominent card with `Briefcase` icon box, mono pill `Production Track Record`, animated count-up `1.5+`, and title `Years of professional code`.
+      - **Dual Secondary Metric Cards**:
+        - `7+` with `Zap` icon in cyan and title `Core Projects`.
+        - `9` with `Award` icon in warm orange and title `Certifications`.
+  - **Right Column**:
+    - Bold headline: `Full Stack Developer specializing in Laravel & React.js`.
+    - Engineering bio narrative detailing RESTful API design, authentication, RBAC, and scalable database architecture.
+    - Magnetic **`View My CV`** button with `FileText` icon.
 
 ---
 
@@ -157,40 +163,72 @@ Each featured project projects a custom ambient glow and accent set based on its
 
 ---
 
-### 3.6 Featured Work (Cinematic Carousel & Dock)
-> **Highlight Section**: Designed with Stripe/Vercel-level attention to detail, combining a cinematic stage card with a bottom macOS dock thumbnail strip.
+### 3.6 Featured Work (Home Page 4 Projects + Dedicated All Projects Archive Page)
+> **Highlight Section**: Inspired by world-class designer portfolios, the homepage strictly features the 4 flagship production platforms followed simply by a clean `"See More"` button. Clicking `"See More"` navigates to a dedicated **All Projects Page** (`/projects`) showcasing all 11 production systems with interactive top-to-bottom screenshot previews, category filters, and complete architectural case studies.
 
-#### A. Top Stage Controls
-- **Counter Badge**: `[ 01 / 11 | EdTech & E-Learning Platform ]` with dynamic pulsing status dot.
-- **Autoplay Control Pill**:
-  - Interactive button showing `<Pause>` `Paused` (amber) or `<Play>` `Auto` (subtle).
-  - **Hover & Touch Pause**: Hovering the cursor anywhere over the card or tapping on mobile **instantly freezes the autoplay timer**, allowing users to read all feature checklists without disruption.
+#### A. Home Page 4-Project Showcase Grid
+- **Strictly 4 Flagship Projects**:
+  1. `READWISE` - Mentors' Vocabulary & Interactive Reader Suite
+  2. `Mentors' Global` - Educational Examination Platform
+  3. `Enterprise ERP` - Full-Stack Enterprise Resource Planning & HRIS
+  4. `Nuvara` - Global Multilingual E-Commerce Platform
+- **Layout**: 2-column responsive grid on desktop (`grid-template-columns: repeat(2, 1fr)`), seamlessly adapting to 1-column on mobile.
+- **Clean "See More" Button**:
+  - Located directly beneath the 4 projects cards.
+  - Minimalist, magnetic pill button with diagonal arrow (`See More ↗`).
+  - Smoothly navigates to the dedicated `/projects` archive page without cluttering the homepage.
 
-#### B. Main Cinematic Stage Card (Split Grid)
-- **Left Column (Technical Specs)**:
-  - Category pill with dynamic Lucide icon (`BookOpen`, `GraduationCap`, `Building2`, etc.).
-  - Project Title (`h3`, bold, tight letter-spacing).
-  - Comprehensive 2-sentence architecture overview.
-  - **4 Feature Checkpoint Bullets**: Circular check bubbles (`Check` icon with glowing border) followed by specific architectural wins.
-  - **Tech Stack Badges**: Interactive pills with branded icon colors (Laravel flame, React atom, MySQL database, Tailwind layers).
-  - **Action Buttons**: Magnetic `"Live Demo"` button (primary gradient with `ExternalLink`) and `"Source Code"` button (frosted glass with GitHub SVG icon).
-- **Right Column (Stationary Browser Mockup)**:
-  - High-precision macOS browser window frame.
-  - Chrome topbar with window dots, interactive URL address bar (`Lock` icon, domain name in bold, path in muted tone, `RotateCw` reload icon).
-  - Matted screenshot viewport: High-resolution production app screenshot.
-  - **Stationary Guarantee**: The card and screen image remain solidly fixed in position on touch and hover (no 3D tilt or zoom displacement).
-  - **Bottom Status Footer**: Monospace status indicators: `● Production Build` and `● Tested & Scalable`.
+#### B. Dedicated All Projects Page (`/projects`)
+- **Top Navigation Bar**: `"← Back to Home"` button returning visitors directly to the home page's `#projects` section.
+- **Header Block**: Complete production archive title and statistics badge.
+- **Category Filter Tabs**: Fast switching between `All Projects (11)`, `EdTech & Learning`, `E-Commerce`, `ERP & Enterprise`, and `IT & Cloud Services`.
+- **Complete 11-Project Showcase**: All 11 production platforms rendered in the responsive 2-column grid.
+- **Bottom Navigation**: Secondary `"← Back to Home"` button for effortless browsing.
 
-#### C. Autoplay Linear Progress Bar
-- Ultra-thin 2px progress bar spanning the stage card width.
-- Progresses smoothly from 0% to 100% over 7.5 seconds when active; pauses and dims gracefully when paused.
+#### C. Fixed-Size macOS Image Box with Top-to-Bottom Scroll
+- **Fixed Dimensions**: Fixed `340px` height on desktop, `300px` on tablets, and `230px` on smartphones, preventing layout shifts.
+- **macOS Browser Frame**: Window control dots (red, yellow, green), domain address bar with SSL padlock (`Lock`), and pulsing `Live` status beacon.
+- **Top-to-Bottom Hover & Touch Scroll Mechanics**:
+  - Screenshot begins at top (`translateY(0)`).
+  - Hovering over the image frame (or touching/holding on mobile) smoothly translates the entire screenshot vertically to `translateY(calc(-100% + <viewport-height>))` over 6.5s.
+  - Moving the cursor away smoothly glides the screenshot back to the top over 1.2s.
+- **Scroll Cue Pill**: Floating indicator badge (`Hover to scroll ↕`) that fades during active scrolling.
 
-#### D. macOS Dock Thumbnail Strip
-- Centered dock floating on frosted glass (`background: rgba(18, 22, 34, 0.7); backdrop-filter: blur(20px)`).
-- Contains mini thumbnails for all 11 projects.
-- **Active Sliding Pill**: Spring-animated border (`Framer Motion layoutId="activeDockPill"`) that snaps smoothly between thumbnails.
-- **Hover Tooltip**: Floating bubble displaying the project title and primary framework.
-- **Active Underline Dot**: Glowing accent dot directly beneath the selected thumbnail.
+#### D. Minimal Card Presentation (Image Hover + Project Name)
+- **Ultra-Clean Editorial Layout**:
+  - The project cards in Featured Work (and the All Projects gallery) are intentionally streamlined to display **solely the interactive browser mockup image with top-to-bottom hover preview** and the **Project Name** beneath it.
+  - Removes in-card clutter (subtitles, descriptions, checklists, tags, and dual action buttons) from the page grid, elevating the portfolio to world-class editorial standards.
+- **Brand-Derived Headline Typography**:
+  - The Project Title headline directly adopts the **signature brand color extracted from the project screenshot image**:
+    - READWISE: `#F59E0B` (Amber Gold)
+    - Mentors' Global: `#E11D48` (Scarlet Red)
+    - Enterprise ERP: `#6366F1` (Electric Indigo)
+    - Nuvara: `#0D9488` / `#10B981` (Lush Teal / Emerald)
+    - Kino Atelier: `#D4A373` (Champagne Travertine)
+    - CodexLabAsia: `#0284C7` (Tech Sky Blue)
+  - Paired with an interactive circular diagonal arrow chip (`ArrowUpRight`) that transitions dynamically on card hover.
+- **One-Click Case Study Trigger**:
+  - Clicking anywhere on the card or project title immediately opens the **Executive Project Description Modal**, which contains all comprehensive engineering specifications, live demo links, architecture highlights, and technology badges.
+
+#### E. Executive Detail View Modal (2-Column Architecture & Live Viewport)
+- **Modal Trigger**: Clicking "Inspect Specs", the card image box, or the project title opens the executive description modal via `createPortal`.
+- **2-Column Split Stage Architecture**:
+  - Eliminates the generic "AI-made" vertical stack by presenting visual mockup and engineering specifications side-by-side above the fold (`1.12fr : 1fr` ratio, max-width `1180px`).
+  - **Left Column (Live Viewport & Browser Frame)**:
+    - High-fidelity macOS browser chrome with traffic lights, SSL padlock pill, and direct `"Visit Live ↗"` chip.
+    - Large 440px viewport screen with smooth top-to-bottom scroll interaction on hover and touch (`translateY(calc(-100% + 440px))` over 7.5s, returning gracefully in 1.4s).
+    - Minimalist frosted cue pill (`Hover to scroll full page ↕`).
+    - Lower browser status bar featuring architectural tags (`Full-Stack Architecture`, `Interactive Live Viewport`).
+  - **Right Column (Engineering Specifications Suite)**:
+    - Single-line metric strip with `ShieldCheck` icon highlighting verified outcomes.
+    - Title styled dynamically with the project's signature image brand color (`var(--proj-brand)`).
+    - Direct action buttons (Magnetic `"Live Platform Demo"` with brand glow + `"Inspect Source Code"` with GitHub icon).
+    - Monospace section labels (`SYSTEM OVERVIEW`, `ARCHITECTURAL HIGHLIGHTS`, `STACK & INFRASTRUCTURE`).
+    - High-contrast frosted micro-cards for architectural highlights with custom checkmark circle badges.
+    - Framework & technology badges with corresponding icons.
+- **Top Bar & Footer Controls**:
+  - Live status beacon pill (`Production Platform` with pulsing amber/emerald dot).
+  - Navigation controls: Previous / Next project buttons, quick browse counter (`01 of 11`), full keyboard navigation (`←`, `→` arrow keys to browse, `Esc` to close), and body scroll lock.
 
 ---
 
@@ -270,14 +308,14 @@ Generate a high-end, production-grade developer portfolio website matching the f
    - About section with bio narrative, 3 glass metric counters (+4 Years, +15 Deployed Systems, 99.9% Uptime), and developer portrait.
    - Skills matrix categorized into Backend, Frontend, Database, and DevOps with tech-branded icon badges.
    - Work Experience inside a macOS terminal window with vertical branch node tree, company logo circles, verified seals, and tech chips.
-   - Featured Work carousel:
-     * Project #1: READWISE - Mentors' Vocabulary & Interactive Reader Suite (Laravel 12, Blade, Tailwind, MySQL, Live Demo: https://readwise.org/).
-     * Project #2: Mentors' Global Education Platform.
-     * Split-column card: left technical details & checkmark bullets; right fixed macOS browser mockup with address bar and screenshot.
-     * Autoplay with hover & touch pause, topbar status pill, and bottom Stripe/Vercel-style macOS thumbnail dock.
+   - Featured Work directory:
+     * Interactive project row directory (#, Platform & Architecture, Key Highlights, Stack, Inspect arrow).
+     * Cursor-following floating browser card with spring physics, 3D tilt, and continuous auto-scrolling screenshot.
+     * Full-screen detail view modal popup with auto-scrolling browser viewport (pause on hover), technical specifications, architecture checklist, and direct demo/source links.
    - Credentials (Certificates): 3D holographic glass plaques with rainbow foil edge, verified security badge, copy-to-clipboard ID, and full-screen lightbox modal with keyboard navigation.
    - Education: University credentials and institutional logos.
    - Contact: Clean glass contact form, direct social links, and floating WhatsApp contact button with pulsing radar wave.
 
 3. Interactivity: Stationary cards on touch/hover (no jarring tilt or displacement), smooth spring physics on dock navigation, and full mobile responsiveness.
 ```
+

@@ -14,6 +14,8 @@ const rawProjectsData = [
   {
     id: 13,
     title: "READWISE - Mentors' Vocabulary & Interactive Reader Suite",
+    subtitle: "Vocabulary Learning & Interactive Reader Suite",
+    keyMetric: "Tested & Scalable • Multi-guard RBAC",
     description: "Full-stack vocabulary learning and reading comprehension platform with interactive word lookups and real-time progress analytics.",
     features: [
       "Designed and implemented an interactive in-text vocabulary engine with instant word definitions, parts-of-speech tagging, and word favoriting.",
@@ -31,6 +33,8 @@ const rawProjectsData = [
   {
     id: 9,
     title: "Mentors' Global",
+    subtitle: "IELTS & PTE Educational Examination Platform",
+    keyMetric: "5,000+ Students • Automated Grading",
     description: "Comprehensive education management platform featuring IELTS and PTE course dashboards, online mock testing, and interactive student review systems.",
     features: [
       "Designed and developed the comprehensive admin dashboard panel to manage IELTS & PTE course curricula and scheduling.",
@@ -48,6 +52,8 @@ const rawProjectsData = [
   {
     id: 12,
     title: "Enterprise ERP & HR Management System",
+    subtitle: "Full-Stack Enterprise Resource Planning & HRIS",
+    keyMetric: "Multi-tenant Scoping • Automated Payroll",
     description: "Full-stack enterprise resource planning platform featuring multi-company RBAC, automated payroll, HRIS, CRM, inventory, and financial accounting modules.",
     features: [
       "Architected a full-stack Enterprise Resource Planning (ERP) platform utilizing Laravel 12, Blade components, and Tailwind CSS 4.",
@@ -67,6 +73,8 @@ const rawProjectsData = [
   {
     id: 11,
     title: "Nuvara E-commerce Platform",
+    subtitle: "Global Multilingual E-Commerce Storefront",
+    keyMetric: "RTL Arabic & i18n • Real-time Zustand Cart",
     description: "Full-stack modern e-commerce platform with multi-language RTL support, promo code engine, and dynamic theme customization.",
     features: [
       "Built a full-stack e-commerce web app with a React 19 SPA frontend and Laravel RESTful API backend.",
@@ -86,6 +94,8 @@ const rawProjectsData = [
   {
     id: 10,
     title: "Kino Atelier",
+    subtitle: "Curated Handcrafted Home Decor Storefront",
+    keyMetric: "Filament Admin • Stripe Checkout Integrated",
     description: "Elegant e-commerce storefront specializing in curated handcrafted travertine, white oak, and fluted earthenware home decor.",
     features: [
       "Designed and developed a high-fidelity Single Page Application (SPA) frontend focused on premium design aesthetics, fluid transitions, and dynamic scroll-responsive navigation.",
@@ -105,6 +115,8 @@ const rawProjectsData = [
   {
     id: 1,
     title: "FruitMart E-commerce",
+    subtitle: "Fresh Farm Produce & Organics Portal",
+    keyMetric: "Live Vendor Scoping • Order Tracking",
     description: "Laravel-based platform for fresh fruit sales with inventory, orders, and vendor management.",
     features: [
       "Built a complete e-commerce platform for online fruit sales.",
@@ -123,6 +135,8 @@ const rawProjectsData = [
   {
     id: 2,
     title: "CodexLabAsia Business Hub",
+    subtitle: "IT Solutions & Business Management Portal",
+    keyMetric: "Spatie Permissions • High-traffic DataTables",
     description: "Official business system for CodexLabAsia, featuring CMS, portfolios, and job tracking.",
     features: [
       "Developed a Laravel-based business management system with frontend and admin modules.",
@@ -141,6 +155,8 @@ const rawProjectsData = [
   {
     id: 3,
     title: "CRM E-Commerce Suite (ShopVerse)",
+    subtitle: "B2B Enterprise Commerce & Lead CRM",
+    keyMetric: "B2B Deals Pipeline • RESTful Microservices",
     description: "Full-stack e-commerce system featuring API-driven checkouts and role access permissions.",
     features: [
       "Designed and implemented RESTful APIs to handle product management, cart, and order processing.",
@@ -159,6 +175,8 @@ const rawProjectsData = [
   {
     id: 4,
     title: "Coffee Blend Cafe",
+    subtitle: "Artisanal Cafe Ordering & Menu Suite",
+    keyMetric: "Real-time Order Workflow • Responsive Menu",
     description: "Responsive cafe customer ordering and menu administration site.",
     features: [
       "Built a coffee shop website with user registration and ordering system.",
@@ -176,6 +194,8 @@ const rawProjectsData = [
   {
     id: 6,
     title: "Hospital Management System",
+    subtitle: "Clinical Healthcare & Appointments Platform",
+    keyMetric: "Doctor Scheduling • Patient Records System",
     description: "Laravel-based panel for doctor assignments, appointments, and billing.",
     features: [
       "Designed complete relational database schema for doctor scheduling and patient records.",
@@ -193,6 +213,8 @@ const rawProjectsData = [
   {
     id: 8,
     title: "Online Learning System Backend",
+    subtitle: "EdTech Learning Platform API Microservice",
+    keyMetric: "NestJS Architecture • JWT Role Guards",
     description: "Structured NestJS API backend for student registrations and course enrollments.",
     features: [
       "Designed and implemented structured REST APIs using NestJS and TypeScript.",
