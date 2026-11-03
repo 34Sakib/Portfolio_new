@@ -269,11 +269,16 @@ Each featured project projects a custom ambient glow and accent set based on its
 ---
 
 ### 3.10 Floating Persistent Utilities
-1. **Floating WhatsApp Button**:
-   - Fixed at `bottom: 2rem`, `right: 2rem`.
-   - Circular emerald badge (`#25D366`) with WhatsApp SVG icon.
-   - Animated concentric radar wave pulse radiating outwards.
-   - Direct link to `https://wa.me/...`.
+1. **Responsive Floating WhatsApp Widget**:
+   - **Multi-Tier Viewport Adaptation**:
+     - **Desktop (> 768px)**: `bottom: calc(2rem + env(safe-area-inset-bottom, 0px))`, `right: calc(2rem + env(safe-area-inset-right, 0px))`, diameter `56px`, icon `24px`.
+     - **Tablet (481px–768px)**: `bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px))`, `right: calc(1.5rem + env(safe-area-inset-right, 0px))`, diameter `50px`, icon `22px`.
+     - **Mobile (361px–480px)**: `bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px))`, `right: calc(1.15rem + env(safe-area-inset-right, 0px))`, diameter `46px`, icon `20px`.
+     - **Ultra-Compact (<= 360px)**: `bottom: calc(0.9rem + env(safe-area-inset-bottom, 0px))`, `right: calc(0.9rem + env(safe-area-inset-right, 0px))`, diameter `44px` (WCAG AAA minimum touch target), icon `19px`.
+   - **Safe-Area Insets**: Full native iOS & Android home indicator and notch support with `env(safe-area-inset-bottom)` and `env(safe-area-inset-right)`.
+   - **Touch & Hover Safety**: Hover tooltip (`Available Now • Let's talk project! 👋`) is automatically suppressed on touch devices (`@media (hover: none)`) and viewports `<= 768px` to guarantee 0 horizontal overflow and no screen obstruction.
+   - **Modal Suppression**: When `ProjectDetailModal` or Certificate Lightbox is open, the WhatsApp button automatically scales down and fades out (`opacity: 0; pointer-events: none`).
+   - **Aesthetics**: WhatsApp Brand Green (`#25D366`), white drop-shadowed vector icon, and ambient pulsating beacon ring.
 
 ---
 
