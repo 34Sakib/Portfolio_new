@@ -1271,13 +1271,27 @@ a {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .about-stats-card {
     grid-template-columns: 1fr;
   }
 
   .about-stat-item {
-    padding: 0.95rem 1.15rem;
+    padding: 1.1rem 1.15rem;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .about-stat-header {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .about-stat-label {
+    text-align: center;
+    width: 100%;
   }
 
   .about-stat-item:not(:last-child) {
@@ -1291,13 +1305,21 @@ a {
     padding: 1.15rem 1rem;
   }
   .about-stat-item {
-    padding: 0.85rem 1rem;
+    padding: 0.95rem 1rem;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+  .about-stat-header {
+    justify-content: center;
+    align-items: center;
   }
   .about-stat-number {
     font-size: 1.4rem;
   }
   .about-stat-label {
     font-size: 0.72rem;
+    text-align: center;
   }
   .about-headline {
     font-size: 1.18rem;
@@ -3153,25 +3175,31 @@ a {
   padding-bottom: 0.5rem;
 }
 
-/* Header Block */
+/* Header Block - Centered for each project */
 .detail-header-block {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.55rem;
+  align-items: center;
+  text-align: center;
+  width: 100%;
 }
 
 .detail-metric-strip {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
-  padding: 0.35rem 0.8rem;
+  padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.09);
   color: var(--text-secondary);
-  align-self: flex-start;
+  align-self: center;
+  margin: 0 auto;
+  text-align: center;
 }
 
 [data-theme="light"] .detail-metric-strip {
@@ -3186,13 +3214,18 @@ a {
   letter-spacing: -0.025em;
   margin: 0;
   line-height: 1.22;
+  text-align: center;
+  width: 100%;
 }
 
 .detail-project-subtitle {
   font-size: 0.92rem;
   color: var(--text-secondary);
-  line-height: 1.5;
-  margin: 0;
+  line-height: 1.55;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 650px;
+  width: 100%;
 }
 
 /* Direct Action Buttons */
@@ -3201,6 +3234,8 @@ a {
   flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .detail-btn-demo,
@@ -3529,9 +3564,34 @@ a {
     transform: translateY(calc(-100% + 220px));
   }
 
+  .detail-header-block {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .detail-metric-strip {
+    align-self: center;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .detail-project-title {
+    text-align: center;
+    width: 100%;
+  }
+
+  .detail-project-subtitle {
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   .detail-actions-row {
     flex-direction: column;
     width: 100%;
+    align-items: center;
+    justify-content: center;
   }
 
   .detail-btn-demo,

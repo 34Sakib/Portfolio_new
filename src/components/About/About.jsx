@@ -149,7 +149,7 @@ export const About = () => {
                     <Counter value={9} />
                   </span>
                 </div>
-                <span className="about-stat-label">Certifications</span>
+                <span className="about-stat-label">Certification</span>
               </div>
             </motion.div>
           </div>
