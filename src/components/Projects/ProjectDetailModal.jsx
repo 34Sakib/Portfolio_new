@@ -67,9 +67,9 @@ export const ProjectDetailModal = ({
           '--proj-accent': colors.accent
         }}
       >
-        {/* Modal Top Bar */}
+        {/* Modal Top Bar - Centered Category Badge & Next-Line < > Navigation */}
         <div className="project-detail-topbar">
-          <div className="detail-topbar-left">
+          <div className="detail-topbar-center-col">
             <div 
               className="detail-category-badge"
               style={{ 
@@ -82,50 +82,39 @@ export const ProjectDetailModal = ({
               <span>{colors.category}</span>
             </div>
 
-            <div className="detail-status-pill">
-              <span className="detail-status-beacon" style={{ backgroundColor: colors.primary }} />
-              <span>Production Platform</span>
+            <div className="detail-topbar-nav-row">
+              <div className="detail-nav-group">
+                <button
+                  type="button"
+                  className="detail-nav-btn"
+                  onClick={onPrev}
+                  aria-label={`Previous project (${currentIndex === 0 ? totalCount : currentIndex} of ${totalCount})`}
+                  title="Previous project (←)"
+                >
+                  <ChevronLeft size={17} />
+                </button>
+                <button
+                  type="button"
+                  className="detail-nav-btn"
+                  onClick={onNext}
+                  aria-label={`Next project (${currentIndex + 2 > totalCount ? 1 : currentIndex + 2} of ${totalCount})`}
+                  title="Next project (→)"
+                >
+                  <ChevronRight size={17} />
+                </button>
+              </div>
             </div>
-
-            <span className="detail-counter-pill">
-              {currentIndex + 1} of {totalCount}
-            </span>
           </div>
 
-          <div className="detail-topbar-right">
-            <div className="detail-nav-group">
-              <button
-                type="button"
-                className="detail-nav-btn"
-                onClick={onPrev}
-                aria-label="Previous project"
-                title="Previous project (←)"
-              >
-                <ChevronLeft size={17} />
-                <span className="nav-btn-label">Prev</span>
-              </button>
-              <button
-                type="button"
-                className="detail-nav-btn"
-                onClick={onNext}
-                aria-label="Next project"
-                title="Next project (→)"
-              >
-                <span className="nav-btn-label">Next</span>
-                <ChevronRight size={17} />
-              </button>
-            </div>
-
-            <button
-              type="button"
-              className="detail-close-btn"
-              onClick={onClose}
-              aria-label="Close project specifications"
-              title="Close (Esc)"
-            >
-              <X size={18} />
-            </button>
-          </div>
+          <button
+            type="button"
+            className="detail-close-btn"
+            onClick={onClose}
+            aria-label="Close project specifications"
+            title="Close (Esc)"
+          >
+            <X size={18} />
+          </button>
         </div>
 
         {/* Executive 2-Column Split Body */}
